@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Timers;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Timer = System.Timers.Timer;
 
 namespace _2延线BOM运行监测系统
 {
@@ -30,6 +31,8 @@ namespace _2延线BOM运行监测系统
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             lbVersion.Content = Assembly.GetEntryAssembly()?.GetName().Version?.ToString();
+            lbStationName.Content = GetStationName.getStationName();
+            lbEqNumber.Content = Environment.MachineName;
         }
         private void getCurrentDateTime()
         {
@@ -52,31 +55,34 @@ namespace _2延线BOM运行监测系统
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            Button btn=sender as Button;
-            if (btn == minBtn || btn == closeBtn)
+            Button btn = sender as Button;
+            if (btn == minBtn || btn == closeBtn)//右上角最小化和关闭按钮
             {
                 WindowState = WindowState.Minimized;
             }
-            if (btn==ieBtn)
+            if (btn == ieBtn)//重置IE按钮
             {
                 ResetIE.resetIE();
             }
-            if (btn==diskBtn)
+            if (btn == diskBtn)//磁盘修复按钮
             {
-                if (Directory.Exists(@"D:\"))
-                    Chkdsk.StartChkdsk("D");
-                else
-                    Chkdsk.StartChkdsk("C");
+                ThreadPool.QueueUserWorkItem(state =>
+                {
+                    if (Directory.Exists(@"D:\"))
+                        Chkdsk.StartChkdsk("D");
+                    else
+                        Chkdsk.StartChkdsk("C");
+                });
             }
         }
 
         private void UIElement_OnMouseMove(object sender, MouseEventArgs e)
         {
-            Button btn = (Button) sender;
-            if (btn == minBtn|| btn == closeBtn)
+            Button btn = (Button)sender;
+            if (btn == minBtn || btn == closeBtn)
             {
                 btn.BorderBrush = Brushes.Gold;
-                btn.BorderThickness=new Thickness(1);
+                btn.BorderThickness = new Thickness(1);
             }
             else
             {
@@ -92,16 +98,16 @@ namespace _2延线BOM运行监测系统
             if (btn == minBtn || btn == closeBtn)
             {
                 btn.BorderBrush = null;
-                
+
             }
             else
             {
                 btn.Background = Brushes.Gold;
                 btn.FontSize = 13;
-                btn.Foreground=Brushes.Black;
+                btn.Foreground = Brushes.Black;
             }
         }
 
-        
+
     }
 }

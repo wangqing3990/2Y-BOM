@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace _2延线BOM运行监测系统
 {
@@ -42,7 +43,7 @@ namespace _2延线BOM运行监测系统
 
         public static void resetIE()
         {
-            while (true)
+            Task.Factory.StartNew(() =>
             {
                 Process[] processes = Process.GetProcessesByName("iexplore");
                 if (processes.Length == 0)
@@ -55,8 +56,7 @@ namespace _2延线BOM运行监测系统
 
                     ResetInternetExplorerSettings(null);
                 }
-                Thread.Sleep(24 * 60 * 60 * 1000);
-            }
+            }, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
         }
     }
 }

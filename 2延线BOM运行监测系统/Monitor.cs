@@ -160,7 +160,7 @@ namespace _2延线BOM运行监测系统
 
                         // 定义一个事件日志源
                         string eventLogSource = "Application"; // 这里使用了“应用程序”日志
-                                                               // 创建一个事件日志实例
+                        // 创建一个事件日志实例
                         EventLog eventLog = new EventLog(eventLogSource);
                         // 遍历最新的事件条目
                         foreach (EventLogEntry entry in eventLog.Entries)
