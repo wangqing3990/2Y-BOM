@@ -8,7 +8,7 @@ namespace _2延线BOM运行监测系统
 {
     class Copy
     {
-        static ShowLog sl = new ShowLog();
+        static ShowLog sl = Monitor.sl;
         public static void CopySth(string sourcePath, string targetPath, string[] excludedDirs)
         {
             var files = Directory.GetFiles(sourcePath, "*", SearchOption.TopDirectoryOnly).Where(file => !excludedDirs.Any(excluded => file.StartsWith(Path.Combine(sourcePath, excluded), StringComparison.OrdinalIgnoreCase)));
