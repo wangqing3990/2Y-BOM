@@ -9,6 +9,7 @@ namespace _2延线BOM运行监测系统
 {
     class Chkdsk
     {
+        static ShowLog sl = new ShowLog();
         public static void StartChkdsk(string disk)
         {
             Process process = new Process();
@@ -22,29 +23,23 @@ namespace _2延线BOM运行监测系统
                 process.WaitForExit();
 
                 int exitCode = process.ExitCode;// 获取 Process 对象的退出代码
-                Console.WriteLine(exitCode.ToString());//调试
+                sl.showLog(exitCode.ToString());//调试
 
                 // 判断退出代码为0，表示 chkdsk 命令成功执行
                 if (exitCode == 0)
                 {
-                    Console.WriteLine($"磁盘 {disk} 修复成功\n");
+                    sl.showLog($"磁盘 {disk} 修复成功\n");
                 }
                 else if (exitCode == 50 || exitCode == 3) // 判断退出代码是否为 50或3，表示需要在下次启动时才能修复错误
                 {
-                    Console.WriteLine("磁盘 {disk} 需要在下次启动时才能修复错误,即将重启系统");
+                    sl.showLog("磁盘 {disk} 需要在下次启动时才能修复错误,即将重启系统");
                     Process.Start("shutdown.exe", "/r /t 5 /f /d p:4:1 /c \"重启系统\"");
                     Thread.Sleep(10 * 1000);
-                }
-                else
-                {
-                    Console.WriteLine("磁盘 {disk} 修复失败：chkdsk 命令的参数错误或使用错误\n");
-                    //Console.WriteLine("检测到磁盘D需要格式化，之后会自动重装TVM程序");
-
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"执行 chkdsk 命令时发生错误：{ex.Message}\n");
+                sl.showLog($"执行 chkdsk 命令时发生错误：{ex.Message}\n");
             }
             finally
             {

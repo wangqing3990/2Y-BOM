@@ -8,12 +8,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Threading;
 
 namespace _2延线BOM运行监测系统
 {
     class Monitor
     {
         private static bool isShown = false;//只显示BOM正在运行一次
+        static ShowLog sl=new ShowLog();
         private static string ExtractFilePathFromErrorMessage(string errorMessage)
         {
             // 错误信息的格式为：文件或目录\BOM\Log\CCM\20230410.log已损坏且无法读取。请运行Chkdsk工具。
@@ -28,20 +30,21 @@ namespace _2延线BOM运行监测系统
         }
 
         private const string BOM = "Suzhou.APP.BOM";
-        public static void MonitorBOM()
+        public static void MonitorBOM(CancellationTokenSource cts)
         {
+            cts = MainWindow.cts;
             Thread.Sleep(60 * 1000);
             TimeSpan start = new TimeSpan(00, 0, 0);
             TimeSpan end = new TimeSpan(5, 0, 0);
 
-            while (true)
+            while (!cts.IsCancellationRequested)
             {
                 var processes = Process.GetProcessesByName(BOM);
                 if (processes.Length == 0)
                 {
                     if (DateTime.Now.TimeOfDay > start && DateTime.Now.TimeOfDay < end)
                     {
-                        Console.WriteLine(DateTime.Now + " BOM程序自动重启中,请等待...");
+                        sl.showLog("BOM程序自动重启中,请等待...");
                         startBOM();
                     }
                     else
@@ -50,12 +53,12 @@ namespace _2延线BOM运行监测系统
                         MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                         if (result == DialogResult.Yes)
                         {
-                            Console.WriteLine(DateTime.Now + " BOM程序启动中,请等待...");
+                            sl.showLog("BOM程序启动中,请等待...");
                             startBOM();
                         }
                         else if (result == DialogResult.No)
                         {
-                            Console.WriteLine(DateTime.Now + " 暂停BOM运行监测5分钟,按Enter立即恢复监测\n");
+                            sl.showLog("暂停BOM运行监测5分钟,按Enter立即恢复监测");
                             stopMonitor5Min();
                         }
                     }
@@ -64,7 +67,7 @@ namespace _2延线BOM运行监测系统
                 {
                     if (!isShown)
                     {
-                        Console.WriteLine(DateTime.Now + " BOM程序正在运行中，进入监测状态\n");
+                        sl.showLog("BOM程序正在运行中，进入监测状态\n");
                         isShown = true;
                     }
                 }
@@ -96,9 +99,9 @@ namespace _2延线BOM运行监测系统
             }
             catch (Win32Exception we)
             {
-                Console.WriteLine(DateTime.Now + $" BOM启动失败：{we.Message}");
+                sl.showLog(DateTime.Now + $" BOM启动失败：{we.Message}");
                 Remote.remote(BOMPath, disk); //远程拷贝BOM
-                Console.WriteLine(DateTime.Now + " BOM程序启动中,请等待...");
+                sl.showLog(DateTime.Now + " BOM程序启动中,请等待...");
                 Process.Start(BOMExePath);
             }
             catch (Exception) { }
@@ -124,7 +127,7 @@ namespace _2延线BOM运行监测系统
             {
                 if (Process.GetProcessesByName(BOM).Length > 0)
                 {
-                    Console.WriteLine(DateTime.Now + " BOM程序启动成功\n");
+                    sl.showLog("BOM程序启动成功\n");
                     ThreadPool.QueueUserWorkItem(state =>
                     {
                         try
@@ -151,12 +154,12 @@ namespace _2延线BOM运行监测系统
 
                     if (result == DialogResult.Yes)
                     {
-                        Console.WriteLine(DateTime.Now + " 人为退出BOM程序，暂停运行监测5分钟，按Enter立即恢复监测\n");
+                        sl.showLog("人为退出BOM程序，暂停运行监测5分钟，按Enter立即恢复监测\n");
                         stopMonitor5Min();
                     }
                     else if (result == DialogResult.No)
                     {
-                        Console.WriteLine(DateTime.Now + " BOM程序启动失败！开始扫描是否有损坏文件");
+                        sl.showLog("BOM程序启动失败！开始扫描是否有损坏文件");
 
                         // 定义一个事件日志源
                         string eventLogSource = "Application"; // 这里使用了“应用程序”日志
@@ -175,13 +178,12 @@ namespace _2延线BOM运行监测系统
                                         count++;//损坏文件个数加1
                                         try
                                         {
-                                            Console.WriteLine(DateTime.Now + $" 找到并删除损坏文件:{filePath}");
+                                            sl.showLog("找到并删除损坏文件:{filePath}");
                                             File.Delete(filePath);//尝试删除损坏文件
                                         }
                                         catch (Exception ex)
                                         {
-                                            Console.WriteLine(DateTime.Now +
-                                                              $" 删除损坏文件:{filePath}失败：{ex.Message}。开始进行磁盘修复\n");
+                                            sl.showLog($"删除损坏文件:{filePath}失败：{ex.Message}。开始进行磁盘修复\n");
                                             Chkdsk.StartChkdsk(disk);
                                             break;
                                         }
@@ -192,7 +194,7 @@ namespace _2延线BOM运行监测系统
 
                         if (count == 0)
                         {
-                            Console.WriteLine(DateTime.Now + " 未找到损坏文件，是否重装BOM程序\n");
+                            sl.showLog("未找到损坏文件，是否重装BOM程序\n");
                             DialogResult dr = MessageBox.Show("未找到损坏文件，是否重装BOM程序", "提示",
                                 MessageBoxButtons.YesNo, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1,
                                 MessageBoxOptions.DefaultDesktopOnly);
@@ -212,7 +214,7 @@ namespace _2延线BOM运行监测系统
                             }
                             else
                             {
-                                Console.WriteLine(DateTime.Now + " 即将再次尝试重启BOM程序");
+                                sl.showLog("即将再次尝试重启BOM程序");
                             }
                         }
                     }
@@ -236,14 +238,14 @@ namespace _2延线BOM运行监测系统
                     if (key.Key == ConsoleKey.Enter)
                     {
                         b = true;
-                        Console.WriteLine(DateTime.Now + " 已恢复BOM运行监测\n");
+                        sl.showLog("已恢复BOM运行监测\n");
                         break;
                     }
                 }
                 Thread.Sleep(1000);// 每秒检查一次是否按下Enter键
             }
             if (!b)
-                Console.WriteLine(DateTime.Now + " 已恢复BOM运行监测\n");
+                sl.showLog("已恢复BOM运行监测\n");
         }
     }
 }

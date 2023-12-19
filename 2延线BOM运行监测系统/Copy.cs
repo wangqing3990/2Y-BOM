@@ -8,9 +8,9 @@ namespace _2延线BOM运行监测系统
 {
     class Copy
     {
+        static ShowLog sl = new ShowLog();
         public static void CopySth(string sourcePath, string targetPath, string[] excludedDirs)
         {
-
             var files = Directory.GetFiles(sourcePath, "*", SearchOption.TopDirectoryOnly).Where(file => !excludedDirs.Any(excluded => file.StartsWith(Path.Combine(sourcePath, excluded), StringComparison.OrdinalIgnoreCase)));
             var dirs = Directory.GetDirectories(sourcePath, "*", SearchOption.TopDirectoryOnly).Where(dir => !excludedDirs.Any(excluded => dir.EndsWith(excluded, StringComparison.OrdinalIgnoreCase)));
             try
@@ -32,7 +32,7 @@ namespace _2延线BOM运行监测系统
             }
             catch (Exception ex)
             {
-                Console.WriteLine(DateTime.Now + " " + ex.Message);
+                sl.showLog(ex.Message);
             }
         }
     }

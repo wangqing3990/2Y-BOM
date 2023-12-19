@@ -11,7 +11,7 @@ namespace _2延线BOM运行监测系统
 {
     class ResetIE
     {
-        private static System.Timers.Timer resetIeTimer;
+        static ShowLog sl = new ShowLog();
         const int INTERNET_OPTION_SETTINGS_CHANGED = 39;
         const int INTERNET_OPTION_REFRESH = 37;
 
@@ -20,13 +20,14 @@ namespace _2延线BOM运行监测系统
 
         static void ResetInternetExplorerSettings(object state)
         {
+            
             bool result = InternetSetOption(IntPtr.Zero, INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
             result &= InternetSetOption(IntPtr.Zero, INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
 
             if (result)
-                Console.WriteLine(DateTime.Now + " Internet Explorer设置已被重置\n");
+                sl.showLog("Internet Explorer设置已被重置\n");
             else
-                Console.WriteLine(DateTime.Now + " Internet Explorer设置重置失败！\n");
+                sl.showLog("Internet Explorer设置重置失败！\n");
         }
 
         static void ClearMyTracks()

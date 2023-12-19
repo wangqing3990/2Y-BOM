@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,17 +24,57 @@ namespace _2延线BOM运行监测系统
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static TextBox publicTextBox;
+        public static BackgroundWorker monitorWorker;
+        public static BackgroundWorker resolutionWorker;
+        public static CancellationTokenSource cts = new CancellationTokenSource();
         public MainWindow()
         {
             InitializeComponent();
             getCurrentDateTime();
+            //一些注册表/菜单项等设置
+            Settings.set();
+
+            //删除启动文件夹下的启动程序快捷方式
+            StartUpDelete.startUpDelete();
         }
+        //加载时
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
+            publicTextBox = this.tbShowLog;
             lbVersion.Content = Assembly.GetEntryAssembly()?.GetName().Version?.ToString();
             lbStationName.Content = GetStationName.getStationName();
-            lbEqNumber.Content = Environment.MachineName;
+            lbEqNumber.Content = Environment.MachineName.Substring(Math.Max(0, (Environment.MachineName.Length - 6)), 6);
+
+            monitorWorker=new BackgroundWorker();
+            monitorWorker.DoWork += monitorBOM;
+            monitorWorker.RunWorkerAsync(cts.Token);
+
+            resolutionWorker = new BackgroundWorker();
+            resolutionWorker.DoWork+= CheckScreenResolution;
+            resolutionWorker.RunWorkerAsync(cts.Token);
         }
+
+        private void monitorBOM(object sender, DoWorkEventArgs e)
+        {
+            Monitor.MonitorBOM(cts);
+        }
+
+        private void CheckScreenResolution(object sender,DoWorkEventArgs e)
+        {
+            ScreenResolution.CheckScreen();
+        }
+        public static void CancelBackgroundWorkers()
+        {
+            monitorWorker.CancelAsync();
+            resolutionWorker.CancelAsync();
+        }
+
+        public static void cancelThreads()
+        {
+            cts.Cancel();
+        }
+        //显示当前日期时间
         private void getCurrentDateTime()
         {
             Timer t = new Timer();
@@ -48,11 +89,12 @@ namespace _2延线BOM运行监测系统
             };
             t.Start();
         }
+        //顶部鼠标按下移动窗口
         private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
         }
-
+        //按钮点击事件
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
@@ -75,7 +117,7 @@ namespace _2延线BOM运行监测系统
                 });
             }
         }
-
+        //鼠标移入事件
         private void UIElement_OnMouseMove(object sender, MouseEventArgs e)
         {
             Button btn = (Button)sender;
@@ -91,7 +133,7 @@ namespace _2延线BOM运行监测系统
                 btn.Foreground = Brushes.White;
             }
         }
-
+        //鼠标移出事件
         private void UIElement_OnMouseLeave(object sender, MouseEventArgs e)
         {
             Button btn = (Button)sender;

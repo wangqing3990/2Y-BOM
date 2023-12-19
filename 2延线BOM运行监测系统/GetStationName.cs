@@ -43,40 +43,28 @@ namespace _2延线BOM运行监测系统
                 {
                     case "43":
                         return "尹中路";
-                        break;
                     case "44":
                         return "郭巷";
-                        break;
                     case "45":
                         return "郭苑路";
-                        break;
                     case "46":
                         return "尹山湖";
-                        break;
                     case "47":
                         return "独墅湖南";
-                        break;
                     case "48":
                         return "独墅湖邻里中心";
-                        break;
                     case "49":
                         return "月亮湾";
-                        break;
                     case "50":
                         return "松涛街";
-                        break;
                     case "51":
                         return "金谷路";
-                        break;
                     case "52":
                         return "金尚路";
-                        break;
                     case "53":
                         return "桑田岛";
-                        break;
                     default:
                         return "获取失败";
-                        break;
                 }
             }
             return "获取失败";

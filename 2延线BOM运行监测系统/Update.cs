@@ -6,15 +6,17 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Windows;
 
 namespace _2延线BOM运行监测系统
 {
     class Update
     {
+        static ShowLog sl=new ShowLog();
         private static string updateServerPath = @"\\172.22.100.13\2ydata\BOMUpdate\";
         //private static string updateServerPath = @"\\172.22.50.11\2ydata\BOMUpdate\";
 
-        public static void update()
+        public void update()
         {
             while (true)
             {
@@ -30,7 +32,7 @@ namespace _2延线BOM运行监测系统
 
                     if (latestVersion > currentVersion)
                     {
-                        Console.WriteLine(DateTime.Now + " 检测到有新版本可用，即将退出本程序执行更新操作");
+                        sl.showLog("检测到有新版本可用，即将退出本程序执行更新操作");
                         ThreadPool.QueueUserWorkItem(state =>
                         {
                             try
@@ -65,9 +67,7 @@ namespace _2延线BOM运行监测系统
                         }
                         catch (Exception) { }
 
-                        Program.MBThread.Abort();
-                        Program.SRThread.Abort();
-                        Program.ResetIEThread.Abort();
+                        MainWindow.cancelThreads();
                         Environment.Exit(0);
                     }
                 }

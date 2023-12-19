@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Windows;
+using System.Threading;
 
 namespace _2延线BOM运行监测系统
 {
@@ -12,5 +13,6 @@ namespace _2延线BOM运行监测系统
     /// </summary>
     public partial class App : Application
     {
+
     }
 }

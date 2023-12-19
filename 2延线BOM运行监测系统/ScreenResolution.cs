@@ -11,6 +11,7 @@ namespace _2延线BOM运行监测系统
 {
     class ScreenResolution
     {
+        static ShowLog sl=new ShowLog();
         //定义结构体，用于存储分辨率信息
         [StructLayout(LayoutKind.Sequential)]
         public struct DEVMODE
@@ -78,10 +79,10 @@ namespace _2延线BOM运行监测系统
 
         //private static bool isShown = false;
 
+
         //定义监测函数
         static void monitoring(int i, ref DEVMODE devMode, int width, int height, Screen[] screens)
         {
-
             if (EnumDisplaySettings(screens[i - 1].DeviceName, ENUM_CURRENT_SETTINGS, ref devMode)) //获取当前分辨率
             {
                 //if (!isShown)
@@ -92,25 +93,25 @@ namespace _2延线BOM运行监测系统
 
                 if (devMode.dmPelsWidth != width || devMode.dmPelsHeight != height) //如果分辨率跳变，就尝试修改
                 {
-                    Console.WriteLine(DateTime.Now + $" 监测到副屏{i}的分辨率跳变！");
+                    //ShowLog.showLog($"监测到副屏{i}的分辨率跳变！");
                     //Console.WriteLine(DateTime.Now + $" 尝试将副屏{i}的分辨率修改为：{width} x {height}");
                     devMode.dmPelsWidth = width;
                     devMode.dmPelsHeight = height;
                     int result = ChangeDisplaySettingsEx(screens[i - 1].DeviceName, ref devMode, IntPtr.Zero, CDS_TEST, IntPtr.Zero); //测试是否可以修改
                     if (result == DISP_CHANGE_FAILED) //如果失败，提示用户
                     {
-                        Console.WriteLine(DateTime.Now + $" 无法修改副屏{i}的分辨率");
+                        sl.showLog($"监测到副屏{i}的分辨率跳变！无法修改副屏{i}的分辨率");
                     }
                     else //如果成功，更新注册表并提示用户
                     {
                         ChangeDisplaySettingsEx(screens[i - 1].DeviceName, ref devMode, IntPtr.Zero, CDS_UPDATEREGISTRY, IntPtr.Zero);
                         if (result == DISP_CHANGE_RESTART) //如果需要重启，提示用户
                         {
-                            Console.WriteLine(DateTime.Now + " 修改成功，请重启电脑以应用更改");
+                            sl.showLog("监测到副屏{i}的分辨率跳变！修改成功，请重启电脑以应用更改");
                         }
                         else //如果不需要重启，提示用户
                         {
-                            Console.WriteLine(DateTime.Now + $" 副屏{i}的分辨率还原成功\n");
+                            sl.showLog($"监测到副屏{i}的分辨率跳变！副屏{i}的分辨率还原成功\n");
                             ThreadPool.QueueUserWorkItem(state =>
                             {
                                 try
@@ -136,7 +137,7 @@ namespace _2延线BOM运行监测系统
             //}
         }
 
-        private static int ChangeDisplaySettingsEx(ref DEVMODE devMode, int cDS_TEST)
+        private int ChangeDisplaySettingsEx(ref DEVMODE devMode, int cDS_TEST)
         {
             throw new NotImplementedException();
         }
@@ -146,7 +147,9 @@ namespace _2延线BOM运行监测系统
             Screen[] screens = Screen.AllScreens; //获取所有屏幕对象
             DEVMODE devMode = new DEVMODE(); //创建DEVMODE对象
             devMode.dmSize = (short)Marshal.SizeOf(devMode); //设置结构体大小
-            Console.WriteLine(DateTime.Now + " 显示器分辨率监测中...\n");
+
+            sl.showLog("显示器分辨率监测中...\n");
+
             while (true)
             {
                 if (screens.Length == 1)
