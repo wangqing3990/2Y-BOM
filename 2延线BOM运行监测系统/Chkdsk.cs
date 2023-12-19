@@ -9,7 +9,7 @@ namespace _2延线BOM运行监测系统
 {
     class Chkdsk
     {
-        static ShowLog sl = new ShowLog();
+        static ShowLog sl = Monitor.sl;
         public static void StartChkdsk(string disk)
         {
             Process process = new Process();
@@ -18,12 +18,13 @@ namespace _2延线BOM运行监测系统
 
             try
             {
+                sl.showLog("开始执行D盘修复...");
                 process.Start();
 
                 process.WaitForExit();
 
                 int exitCode = process.ExitCode;// 获取 Process 对象的退出代码
-                sl.showLog(exitCode.ToString());//调试
+                //sl.showLog(exitCode.ToString());//调试
 
                 // 判断退出代码为0，表示 chkdsk 命令成功执行
                 if (exitCode == 0)

@@ -9,15 +9,15 @@ namespace _2延线BOM运行监测系统
 {
     class Remote
     {
-        static ShowLog sl = new ShowLog();
+        static ShowLog sl = Monitor.sl;
+
         public static void remote(string targetPath, string disk)
         {
-            
             //string remoteIP = "172.22.50.11";
             string remoteIP = "172.22.100.13";
 
             string sourcePath = @"\\" + remoteIP + @"\2ydata\BOM";
-
+            
             retry:
             if (new Ping().Send(remoteIP).Status == IPStatus.Success)
             {
@@ -37,16 +37,12 @@ namespace _2延线BOM运行监测系统
                 catch (Exception ex)
                 {
                     sl.showLog(DateTime.Now + " BOM程序拷贝失败：" + ex.Message);
-                    sl.showLog(DateTime.Now + " 按Enter键继续");
-                    Console.ReadLine();
                 }
             }
             else
             {
                 sl.showLog(DateTime.Now + " 与服务器连接断开！拷贝BOM程序失败");
-                sl.showLog(DateTime.Now + " 查找原因并恢复与服务器连接后按Enter键重试");
-                Console.ReadLine();
-                goto retry;
+                sl.showLog(DateTime.Now + " 查找原因并恢复与服务器连接后重试");
             }
         }
     }

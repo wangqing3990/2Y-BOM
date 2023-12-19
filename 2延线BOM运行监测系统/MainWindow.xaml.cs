@@ -28,16 +28,18 @@ namespace _2延线BOM运行监测系统
         public static BackgroundWorker monitorWorker;
         public static BackgroundWorker resolutionWorker;
         public static CancellationTokenSource cts = new CancellationTokenSource();
+        public static ManualResetEvent mre = new ManualResetEvent(true);
         public MainWindow()
         {
             InitializeComponent();
             getCurrentDateTime();
             //一些注册表/菜单项等设置
             Settings.set();
-
             //删除启动文件夹下的启动程序快捷方式
             StartUpDelete.startUpDelete();
+
         }
+
         //加载时
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -46,23 +48,23 @@ namespace _2延线BOM运行监测系统
             lbStationName.Content = GetStationName.getStationName();
             lbEqNumber.Content = Environment.MachineName.Substring(Math.Max(0, (Environment.MachineName.Length - 6)), 6);
 
-            monitorWorker=new BackgroundWorker();
+            monitorWorker = new BackgroundWorker();
             monitorWorker.DoWork += monitorBOM;
             monitorWorker.RunWorkerAsync(cts.Token);
 
             resolutionWorker = new BackgroundWorker();
-            resolutionWorker.DoWork+= CheckScreenResolution;
+            resolutionWorker.DoWork += CheckScreenResolution;
             resolutionWorker.RunWorkerAsync(cts.Token);
         }
 
         private void monitorBOM(object sender, DoWorkEventArgs e)
         {
-            Monitor.MonitorBOM(cts);
+            Monitor.MonitorBOM(cts, mre);
         }
 
-        private void CheckScreenResolution(object sender,DoWorkEventArgs e)
+        private void CheckScreenResolution(object sender, DoWorkEventArgs e)
         {
-            ScreenResolution.CheckScreen();
+            ScreenResolution.CheckScreen(cts);
         }
         public static void CancelBackgroundWorkers()
         {
@@ -104,7 +106,10 @@ namespace _2延线BOM运行监测系统
             }
             if (btn == ieBtn)//重置IE按钮
             {
-                ResetIE.resetIE();
+                ThreadPool.QueueUserWorkItem(state =>
+                {
+                    ResetIE.resetIE();
+                });
             }
             if (btn == diskBtn)//磁盘修复按钮
             {
@@ -116,6 +121,32 @@ namespace _2延线BOM运行监测系统
                         Chkdsk.StartChkdsk("C");
                 });
             }
+            if (btn == restartBOM)
+            {
+                Monitor.startBOM();
+            }
+            if (btn == reinstallBOM)
+            {
+                ThreadPool.QueueUserWorkItem(state =>
+                {
+                    Remote.remote(@"D:\BOM", "D");
+                });
+            }
+            if (btn == stopMonitor)
+            {
+                if (btn.Content == "暂停监测")
+                {
+                    Monitor.monitorMre.Reset();
+                    Monitor.sl.showLog("暂停监测BOM进程");
+                    btn.Content = "恢复监测";
+                }
+                else
+                {
+                    Monitor.monitorMre.Set();
+                    Monitor.sl.showLog("恢复监测BOM进程");
+                    btn.Content = "暂停监测";
+                }
+            }
         }
         //鼠标移入事件
         private void UIElement_OnMouseMove(object sender, MouseEventArgs e)
@@ -123,7 +154,7 @@ namespace _2延线BOM运行监测系统
             Button btn = (Button)sender;
             if (btn == minBtn || btn == closeBtn)
             {
-                btn.BorderBrush = Brushes.Gold;
+                btn.BorderBrush = Brushes.DodgerBlue;
                 btn.BorderThickness = new Thickness(1);
             }
             else
@@ -140,7 +171,6 @@ namespace _2延线BOM运行监测系统
             if (btn == minBtn || btn == closeBtn)
             {
                 btn.BorderBrush = null;
-
             }
             else
             {

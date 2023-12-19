@@ -11,7 +11,7 @@ namespace _2延线BOM运行监测系统
 {
     class ScreenResolution
     {
-        static ShowLog sl=new ShowLog();
+        static ShowLog sl=Monitor.sl;
         //定义结构体，用于存储分辨率信息
         [StructLayout(LayoutKind.Sequential)]
         public struct DEVMODE
@@ -142,15 +142,16 @@ namespace _2延线BOM运行监测系统
             throw new NotImplementedException();
         }
 
-        public static void CheckScreen()
+        public static void CheckScreen(CancellationTokenSource cts)
         {
+            cts = MainWindow.cts;
             Screen[] screens = Screen.AllScreens; //获取所有屏幕对象
             DEVMODE devMode = new DEVMODE(); //创建DEVMODE对象
             devMode.dmSize = (short)Marshal.SizeOf(devMode); //设置结构体大小
 
             sl.showLog("显示器分辨率监测中...\n");
 
-            while (true)
+            while (!cts.IsCancellationRequested)
             {
                 if (screens.Length == 1)
                 {

@@ -4,9 +4,11 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Threading;
 
@@ -15,7 +17,8 @@ namespace _2延线BOM运行监测系统
     class Monitor
     {
         private static bool isShown = false;//只显示BOM正在运行一次
-        static ShowLog sl=new ShowLog();
+        public static ShowLog sl = new ShowLog();
+        public static ManualResetEvent monitorMre;
         private static string ExtractFilePathFromErrorMessage(string errorMessage)
         {
             // 错误信息的格式为：文件或目录\BOM\Log\CCM\20230410.log已损坏且无法读取。请运行Chkdsk工具。
@@ -30,23 +33,40 @@ namespace _2延线BOM运行监测系统
         }
 
         private const string BOM = "Suzhou.APP.BOM";
-        public static void MonitorBOM(CancellationTokenSource cts)
+        public static void MonitorBOM(CancellationTokenSource cts, ManualResetEvent mre)
         {
             cts = MainWindow.cts;
-            Thread.Sleep(60 * 1000);
-            TimeSpan start = new TimeSpan(00, 0, 0);
-            TimeSpan end = new TimeSpan(5, 0, 0);
+            monitorMre = mre;
+            Thread.Sleep(60 * 1000);//启动程序后等待1分钟再开始监测
+            TimeSpan start = new TimeSpan(23, 30, 0);
+            TimeSpan end = new TimeSpan(4, 0, 0);
+            bool repeat = false;
 
             while (!cts.IsCancellationRequested)
             {
+                monitorMre.WaitOne();
+
                 var processes = Process.GetProcessesByName(BOM);
                 if (processes.Length == 0)
                 {
-                    if (DateTime.Now.TimeOfDay > start && DateTime.Now.TimeOfDay < end)
+                    //23:00-4:00暂停监测
+                    if (DateTime.Now.TimeOfDay >= start || DateTime.Now.TimeOfDay <= end)
+                    {
+                        if (!repeat)
+                        {
+                            sl.showLog($"夜间23：00-4：00暂停监测，如需启动BOM程序，点击[重启BOM]按钮{Environment.NewLine}");
+                            repeat = true;
+                        }
+                        Thread.Sleep(1000);
+                        continue;
+                    }
+                    //4:00-6:00和22:30-23:30自动重启BOM程序
+                    else if ((DateTime.Now.TimeOfDay > end && DateTime.Now.TimeOfDay < new TimeSpan(6, 0, 0)) || (DateTime.Now.TimeOfDay >= new TimeSpan(22, 30, 0)) && DateTime.Now.TimeOfDay < start)
                     {
                         sl.showLog("BOM程序自动重启中,请等待...");
                         startBOM();
                     }
+                    //其他时间段人工重启
                     else
                     {
                         DialogResult result = MessageBox.Show("监测到BOM程序退出，是否需要启动BOM程序？", "提示", MessageBoxButtons.YesNo,
@@ -58,8 +78,8 @@ namespace _2延线BOM运行监测系统
                         }
                         else if (result == DialogResult.No)
                         {
-                            sl.showLog("暂停BOM运行监测5分钟,按Enter立即恢复监测");
-                            stopMonitor5Min();
+                            sl.showLog("暂停BOM运行监测5分钟");
+                            stop5min();
                         }
                     }
                 }
@@ -77,7 +97,7 @@ namespace _2延线BOM运行监测系统
 
         private static string BOMDPath = @"D:\BOM";
         private static string BOMCPath = @"C:\BOM";
-        static void startBOM()
+        public static void startBOM()
         {
             if (Directory.Exists(@"D:\"))
             {
@@ -154,8 +174,8 @@ namespace _2延线BOM运行监测系统
 
                     if (result == DialogResult.Yes)
                     {
-                        sl.showLog("人为退出BOM程序，暂停运行监测5分钟，按Enter立即恢复监测\n");
-                        stopMonitor5Min();
+                        sl.showLog("人为退出BOM程序，暂停运行监测5分钟\n");
+                        stop5min();
                     }
                     else if (result == DialogResult.No)
                     {
@@ -226,26 +246,17 @@ namespace _2延线BOM运行监测系统
             timerAre.WaitOne();
         }
 
-        static void stopMonitor5Min()
+        static void stop5min()
         {
-            bool b = false;
+            monitorMre.Reset();
             DateTime resumeTime = DateTime.Now.AddMinutes(5);
-            while (DateTime.Now < resumeTime)
+            TimeSpan delay = resumeTime - DateTime.Now;
+            while (delay > TimeSpan.Zero)
             {
-                if (Console.KeyAvailable)
-                {
-                    var key = Console.ReadKey(intercept: true);
-                    if (key.Key == ConsoleKey.Enter)
-                    {
-                        b = true;
-                        sl.showLog("已恢复BOM运行监测\n");
-                        break;
-                    }
-                }
-                Thread.Sleep(1000);// 每秒检查一次是否按下Enter键
+                monitorMre.Set();
+                Thread.Sleep(1000);
             }
-            if (!b)
-                sl.showLog("已恢复BOM运行监测\n");
+            sl.showLog("恢复监测");
         }
     }
 }
