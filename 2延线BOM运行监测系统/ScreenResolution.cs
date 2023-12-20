@@ -11,7 +11,7 @@ namespace _2延线BOM运行监测系统
 {
     class ScreenResolution
     {
-        static ShowLog sl=Monitor.sl;
+        static ShowLog sl = Monitor.sl;
         //定义结构体，用于存储分辨率信息
         [StructLayout(LayoutKind.Sequential)]
         public struct DEVMODE
@@ -153,7 +153,19 @@ namespace _2延线BOM运行监测系统
 
             while (!cts.IsCancellationRequested)
             {
-                if (screens.Length == 1)
+                for (int i = 0; i < screens.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        monitoring(i + 1, ref devMode, 1280, 1024, screens);
+                    }
+                    else if (i == 1 || i == 2)
+                    {
+                        monitoring(i + 1, ref devMode, 1024, 768, screens);
+                    }
+                }
+
+                /*if (screens.Length == 1)
                 {
                     monitoring(1, ref devMode, 1280, 1024, screens);
                 }
@@ -167,7 +179,7 @@ namespace _2延线BOM运行监测系统
                     monitoring(1, ref devMode, 1280, 1024, screens);
                     monitoring(2, ref devMode, 1024, 768, screens);
                     monitoring(3, ref devMode, 1024, 768, screens);
-                }
+                }*/
                 Thread.Sleep(1000);
             }
         }

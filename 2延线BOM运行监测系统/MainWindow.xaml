@@ -21,16 +21,16 @@
         <Label x:Name="lbTime" Content="00：00：00" FontSize="30" Foreground="DarkOrange" FontWeight="Bold" HorizontalAlignment="Left" Margin="18,66,0,0" VerticalAlignment="Top"/>
 
         <StackPanel Width="100" HorizontalAlignment="Left" Orientation="Vertical" Margin="0,186,0,21">
-            <Button Content="重启BOM" x:Name="restartBOM" Background="Gold" Width="80" Height="35" HorizontalAlignment="Left" Margin="10,7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
-            <Button Content="磁盘修复" x:Name="diskBtn" Background="Gold" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
-            <Button Content="清理过期日志" x:Name="clearLog" Background="Gold" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
-            <Button Content="初始化发卡" x:Name="initTPU" Background="Gold" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="重启BOM" x:Name="restartBOM" Background="Goldenrod" Width="80" Height="35" HorizontalAlignment="Left" Margin="10,7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="磁盘修复" x:Name="diskBtn" Background="Goldenrod" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="清理过期日志" x:Name="clearLog" FontSize="11" Background="Goldenrod" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="初始化发卡" x:Name="initTPU" Background="Goldenrod" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
         </StackPanel>
         <StackPanel Width="100" HorizontalAlignment="Left" Orientation="Vertical" Margin="100,186,0,21">
-            <Button Content="重装BOM" x:Name="reinstallBOM" Background="Gold" Width="80" Height="35" HorizontalAlignment="Left" Margin="10,7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
-            <Button Content="重置IE" x:Name="ieBtn" Background="Gold" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
-            <Button Content="监测日志" x:Name="monitorLog" Background="Gold" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
-            <Button Content="暂停监测" x:Name="stopMonitor" Background="Gold" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="重装BOM" x:Name="reinstallBOM" Background="Goldenrod" Width="80" Height="35" HorizontalAlignment="Left" Margin="10,7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="重置IE" x:Name="ieBtn" Background="Goldenrod" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="监测日志" x:Name="monitorLog" Background="Goldenrod" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="暂停监测" x:Name="stopMonitor" Background="Goldenrod" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
         </StackPanel>
 
         <Label  Content="车站：" Foreground="DarkOrange" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="6,113,0,0" VerticalAlignment="Top" Width="66"/>

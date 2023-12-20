@@ -44,15 +44,18 @@ namespace _2延线BOM运行监测系统
             }
 
             //删除本地BOM程序目录
-            sl.showLog("正在删除本地BOM程序目录");
-            try
+            if (Directory.Exists(BOMPath))
             {
-                Directory.Delete(BOMPath, true);
-            }
-            catch (Exception ex)
-            {
-                sl.showLog($"删除失败：{ex.Message}");
-                Chkdsk.StartChkdsk(targetDisk);
+                sl.showLog("正在删除本地BOM程序目录");
+                try
+                {
+                    Directory.Delete(BOMPath, true);
+                }
+                catch (Exception ex)
+                {
+                    sl.showLog($"删除失败：{ex.Message}");
+                    Chkdsk.StartChkdsk(targetDisk);
+                }
             }
 
             retry:

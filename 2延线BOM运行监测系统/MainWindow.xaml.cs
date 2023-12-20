@@ -129,13 +129,9 @@ namespace _2延线BOM运行监测系统
                 ThreadPool.QueueUserWorkItem(state =>
                 {
                     if (Process.GetProcessesByName("Suzhou.APP.BOM").Length == 0)
-                    {
                         Monitor.startBOM();
-                    }
                     else
-                    {
                         MessageBox.Show("BOM程序正在运行中！");
-                    }
                 });
             }
             if (btn == reinstallBOM)//重装BOM按钮
@@ -147,13 +143,9 @@ namespace _2延线BOM运行监测系统
                     if (result == System.Windows.Forms.DialogResult.OK)
                     {
                         if (Directory.Exists(@"D:\"))
-                        {
                             Remote.remote(@"D:\");
-                        }
                         else
-                        {
                             Remote.remote(@"C:\");
-                        }
                     }
                 });
             }
@@ -161,14 +153,17 @@ namespace _2延线BOM运行监测系统
             {
                 if (btn.Content.Equals("暂停监测"))
                 {
-                    Monitor.monitorMre.Reset();
-                    Monitor.sl.showLog("暂停监测BOM进程");
                     btn.Content = "恢复监测";
+                    Monitor.sl.showLog("暂停监测BOM进程30分钟");
+                    Monitor.monitorMre.Reset();
+                    Thread.Sleep(10 * 1000);
+                    Monitor.monitorMre.Set();
+                    btn.Content = "暂停监测";
                 }
                 else if (btn.Content.Equals("恢复监测"))
                 {
-                    Monitor.monitorMre.Set();
                     Monitor.sl.showLog("恢复监测BOM进程");
+                    Monitor.monitorMre.Set();
                     btn.Content = "暂停监测";
                 }
             }
@@ -194,13 +189,9 @@ namespace _2延线BOM运行监测系统
                 {
                     sl.showLog("开始清理30天前的日志文件和交易数据文件...");
                     if (Directory.Exists(@"D:\"))
-                    {
                         DeleteFilesOlderThanOneMonth(@"D:\BOM\Log", @"D:\BOM\Datafile");
-                    }
                     else
-                    {
                         DeleteFilesOlderThanOneMonth(@"C:\BOM\Log", @"C:\BOM\Datafile");
-                    }
                     sl.showLog("清理结束，如果有反复删除不掉的请执行[磁盘修复]按钮");
                 });
             }
@@ -245,7 +236,10 @@ namespace _2延线BOM运行监测系统
             else
             {
                 btn.Background = Brushes.DodgerBlue;
-                btn.FontSize = 15;
+                if (btn == clearLog)
+                    btn.FontSize = 12;
+                else
+                    btn.FontSize = 15;
                 btn.Foreground = Brushes.White;
             }
         }
@@ -259,8 +253,11 @@ namespace _2延线BOM运行监测系统
             }
             else
             {
-                btn.Background = Brushes.Gold;
-                btn.FontSize = 13;
+                btn.Background = Brushes.Goldenrod;
+                if (btn == clearLog)
+                    btn.FontSize = 11;
+                else
+                    btn.FontSize = 13;
                 btn.Foreground = Brushes.Black;
             }
         }
