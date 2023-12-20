@@ -79,7 +79,8 @@ namespace _2延线BOM运行监测系统
                         else if (result == DialogResult.No)
                         {
                             sl.showLog("暂停BOM运行监测5分钟");
-                            stop5min();
+                            Thread.Sleep(5 * 60 * 1000);
+                            sl.showLog("恢复监测");
                         }
                     }
                 }
@@ -120,7 +121,7 @@ namespace _2延线BOM运行监测系统
             catch (Win32Exception we)
             {
                 sl.showLog(DateTime.Now + $" BOM启动失败：{we.Message}");
-                Remote.remote(BOMPath, disk); //远程拷贝BOM
+                Remote.remote(Path.GetDirectoryName(BOMPath)); //远程拷贝BOM
                 sl.showLog(DateTime.Now + " BOM程序启动中,请等待...");
                 Process.Start(BOMExePath);
             }
@@ -136,10 +137,11 @@ namespace _2延线BOM运行监测系统
 
         static void delay1Min(string path, string disk)
         {
-            //程序启动后等待60秒
             AutoResetEvent timerAre;
             int count = 0;//查找到的损坏文件个数
             timerAre = new AutoResetEvent(false);
+
+            //程序启动后等待60秒
             System.Timers.Timer timer = new System.Timers.Timer();
             timer.Interval = TimeSpan.FromSeconds(60).TotalMilliseconds;
             timer.AutoReset = false;
@@ -175,7 +177,8 @@ namespace _2延线BOM运行监测系统
                     if (result == DialogResult.Yes)
                     {
                         sl.showLog("人为退出BOM程序，暂停运行监测5分钟\n");
-                        stop5min();
+                        Thread.Sleep(5 * 60 * 1000);
+                        sl.showLog("恢复监测");
                     }
                     else if (result == DialogResult.No)
                     {
@@ -246,17 +249,5 @@ namespace _2延线BOM运行监测系统
             timerAre.WaitOne();
         }
 
-        static void stop5min()
-        {
-            monitorMre.Reset();
-            DateTime resumeTime = DateTime.Now.AddMinutes(5);
-            TimeSpan delay = resumeTime - DateTime.Now;
-            while (delay > TimeSpan.Zero)
-            {
-                monitorMre.Set();
-                Thread.Sleep(1000);
-            }
-            sl.showLog("恢复监测");
-        }
     }
 }

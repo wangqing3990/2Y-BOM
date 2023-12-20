@@ -18,7 +18,7 @@ namespace _2延线BOM运行监测系统
 
             try
             {
-                sl.showLog("开始执行D盘修复...");
+                sl.showLog($"开始执行{disk}盘修复...");
                 process.Start();
 
                 process.WaitForExit();

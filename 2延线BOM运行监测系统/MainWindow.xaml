@@ -15,33 +15,31 @@
             <Button x:Name="minBtn" Width="30" Height="30" Content="-" Foreground="DarkGoldenrod" FontSize="24" FontWeight="Bold" HorizontalAlignment="Right" Margin="0,5,50,5" Padding="5"
                     Background="Transparent" BorderBrush="Transparent" Click="ButtonBase_OnClick" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave"/>
         </Grid>
-        <TextBox x:Name="tbShowLog" Height="312" Margin="252,45,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" VerticalScrollBarVisibility="Auto"
-                 Width="438" IsReadOnly="True" BorderBrush="Gold" BorderThickness="1"/>
-        <Label x:Name="lbDate" Content="2000-11-11" FontSize="26" Foreground="DarkOrange" FontWeight="Bold" HorizontalAlignment="Left" Margin="44,38,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lbTime" Content="00：00：00" FontSize="30" Foreground="DarkOrange" FontWeight="Bold" HorizontalAlignment="Left" Margin="44,63,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbShowLog" Height="334" Margin="200,45,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" VerticalScrollBarVisibility="Auto"
+                 Width="490" IsReadOnly="True" BorderBrush="Gold" BorderThickness="1"/>
+        <Label x:Name="lbDate" Content="2000-11-11" FontSize="26" Foreground="DarkOrange" FontWeight="Bold" HorizontalAlignment="Left" Margin="18,38,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lbTime" Content="00：00：00" FontSize="30" Foreground="DarkOrange" FontWeight="Bold" HorizontalAlignment="Left" Margin="18,66,0,0" VerticalAlignment="Top"/>
 
-        <StackPanel Width="125" Height="180" HorizontalAlignment="Left" Orientation="Vertical" Margin="11,182,0,30">
-            <Button Content="重启BOM" x:Name="restartBOM" Background="Gold" Width="80" Height="35" HorizontalAlignment="Left" Margin="22.5,5,22.5,5" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
-            <Button Content="磁盘修复" x:Name="diskBtn" Background="Gold" Width="80" Height="35" Margin="4" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
-            <Button Content="初始化发卡" x:Name="initTPU" Background="Gold" Width="80" Height="35" Margin="4" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
-            <Button Content="重启系统" x:Name="restartSystem" Background="Gold" Width="80" Height="35" Margin="4" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+        <StackPanel Width="100" HorizontalAlignment="Left" Orientation="Vertical" Margin="0,186,0,21">
+            <Button Content="重启BOM" x:Name="restartBOM" Background="Gold" Width="80" Height="35" HorizontalAlignment="Left" Margin="10,7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="磁盘修复" x:Name="diskBtn" Background="Gold" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="清理过期日志" x:Name="clearLog" Background="Gold" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="初始化发卡" x:Name="initTPU" Background="Gold" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
         </StackPanel>
-        <StackPanel Width="125" Height="180" HorizontalAlignment="Left" Orientation="Vertical" Margin="121,182,0,30">
-            <Button Content="重装BOM" x:Name="reinstallBOM" Background="Gold" Width="80" Height="35" HorizontalAlignment="Left" Margin="22.5,5,22.5,5" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
-            <Button Content="重置IE" x:Name="ieBtn" Background="Gold" Width="80" Height="35" Margin="4" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
-            <Button Content="监测日志" x:Name="monitorLog" Background="Gold" Width="80" Height="35" Margin="4" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
-            <Button Content="暂停监测" x:Name="stopMonitor" Background="Gold" Width="80" Height="35" Margin="4" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+        <StackPanel Width="100" HorizontalAlignment="Left" Orientation="Vertical" Margin="100,186,0,21">
+            <Button Content="重装BOM" x:Name="reinstallBOM" Background="Gold" Width="80" Height="35" HorizontalAlignment="Left" Margin="10,7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="重置IE" x:Name="ieBtn" Background="Gold" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="监测日志" x:Name="monitorLog" Background="Gold" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="暂停监测" x:Name="stopMonitor" Background="Gold" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
         </StackPanel>
 
-        <Label  Content="车站：" Foreground="DarkOrange" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="22,107,0,0" VerticalAlignment="Top"/>
-        <Label  Content="设备号：" Foreground="DarkOrange" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="22,140,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lbStationName" Width="160" Foreground="DodgerBlue" HorizontalContentAlignment="Center" Content="独墅湖邻里中心" FontSize="18" HorizontalAlignment="Left" Margin="86,107,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="lbEqNumber" Content="BOM001" Foreground="DodgerBlue" FontSize="18" HorizontalAlignment="Left" Margin="117,140,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="96"/>
-        <Grid Height="30" VerticalAlignment="Bottom" Grid.Row="1">
-            <Label Content="版本号：V" HorizontalAlignment="Right" Margin="0,0,70,0" VerticalContentAlignment="Bottom" />
-            <Label x:Name="lbVersion" Content="1.0.0.1218" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalContentAlignment="Bottom" Height="30" VerticalAlignment="Top" Width="70"/>
-        </Grid>
+        <Label  Content="车站：" Foreground="DarkOrange" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="6,113,0,0" VerticalAlignment="Top" Width="66"/>
+        <Label  Content="设备号：" Foreground="DarkOrange" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="6,146,0,0" VerticalAlignment="Top" Width="74"/>
+        <Label x:Name="lbStationName" Width="138" Foreground="DodgerBlue" HorizontalContentAlignment="Center" Content="独墅湖邻里中心" FontSize="18" HorizontalAlignment="Left" Margin="57,113,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lbEqNumber" Content="BOM001" Foreground="DodgerBlue" FontSize="18" HorizontalAlignment="Left" Margin="77,146,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="96"/>
 
+        <Label Content="版本号：V" HorizontalAlignment="Right" Margin="0,0,70,0" VerticalContentAlignment="Bottom" Height="25" VerticalAlignment="Bottom"/>
+        <Label x:Name="lbVersion" Content="1.0.0.1218" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalContentAlignment="Top" Height="25" VerticalAlignment="Bottom" Width="70"/>
 
     </Grid>
 </Window>
