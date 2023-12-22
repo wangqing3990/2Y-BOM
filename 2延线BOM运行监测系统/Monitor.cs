@@ -230,7 +230,7 @@ namespace _2延线BOM运行监测系统
                                 }
                                 catch (Exception ex)
                                 {
-                                    Console.WriteLine(DateTime.Now + $" 删除{path} 失败：{ex.Message}。开始进行磁盘修复\n");
+                                    sl.showLog($"删除{path} 失败：{ex.Message}。开始进行磁盘修复\n");
                                     Chkdsk.StartChkdsk(disk);
                                     messageShow();
                                 }

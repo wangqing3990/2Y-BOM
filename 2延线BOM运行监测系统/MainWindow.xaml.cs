@@ -154,11 +154,8 @@ namespace _2延线BOM运行监测系统
                 if (btn.Content.Equals("暂停监测"))
                 {
                     btn.Content = "恢复监测";
-                    Monitor.sl.showLog("暂停监测BOM进程30分钟");
+                    Monitor.sl.showLog("暂停监测BOM进程");
                     Monitor.monitorMre.Reset();
-                    Thread.Sleep(10 * 1000);
-                    Monitor.monitorMre.Set();
-                    btn.Content = "暂停监测";
                 }
                 else if (btn.Content.Equals("恢复监测"))
                 {
@@ -195,7 +192,11 @@ namespace _2延线BOM运行监测系统
                     sl.showLog("清理结束，如果有反复删除不掉的请执行[磁盘修复]按钮");
                 });
             }
-
+            if (btn==monitorLogBtn)
+            {
+                MonitorLog monitorLogWindow=new MonitorLog();
+                monitorLogWindow.Show();
+            }
         }
         //删除过期日志文件
         private void DeleteFilesOlderThanOneMonth(params string[] directoryPaths)

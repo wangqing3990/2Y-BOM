@@ -29,7 +29,7 @@
         <StackPanel Width="100" HorizontalAlignment="Left" Orientation="Vertical" Margin="100,186,0,21">
             <Button Content="重装BOM" x:Name="reinstallBOM" Background="Goldenrod" Width="80" Height="35" HorizontalAlignment="Left" Margin="10,7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
             <Button Content="重置IE" x:Name="ieBtn" Background="Goldenrod" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
-            <Button Content="监测日志" x:Name="monitorLog" Background="Goldenrod" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
+            <Button Content="监测日志" x:Name="monitorLogBtn" Background="Goldenrod" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
             <Button Content="暂停监测" x:Name="stopMonitor" Background="Goldenrod" Width="80" Height="35" Margin="7" MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="ButtonBase_OnClick"/>
         </StackPanel>
 
