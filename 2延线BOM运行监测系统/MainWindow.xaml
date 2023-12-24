@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_2延线BOM运行监测系统"
         mc:Ignorable="d"
-        Title="BOM运行监测"  Height="400" Width="700" Background="White" WindowStyle="None" ResizeMode="NoResize" Icon="imgs/SG.ico" Loaded="MainWindow_OnLoaded" WindowStartupLocation="CenterScreen" >
+        Title="BOM运行监测"  Height="400" Width="700" BorderBrush="Goldenrod" BorderThickness="1" Background="White" WindowStyle="None" ResizeMode="NoResize" Icon="imgs/SG.ico" Loaded="MainWindow_OnLoaded" WindowStartupLocation="CenterScreen" >
     <Grid>
         <Grid Height="40" Background="White" VerticalAlignment="Top" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown">
             <Image Source="imgs/SG.ico" Width="40" Height="40" Margin="205,0,0,0" HorizontalAlignment="Left"/>

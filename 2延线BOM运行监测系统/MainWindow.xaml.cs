@@ -103,6 +103,7 @@ namespace _2延线BOM运行监测系统
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
+
             if (btn == minBtn || btn == closeBtn)//右上角最小化和关闭按钮
             {
                 WindowState = WindowState.Minimized;
@@ -192,10 +193,27 @@ namespace _2延线BOM运行监测系统
                     sl.showLog("清理结束，如果有反复删除不掉的请执行[磁盘修复]按钮");
                 });
             }
-            if (btn==monitorLogBtn)
+            if (btn == monitorLogBtn)//监测日志按钮
             {
-                MonitorLog monitorLogWindow=new MonitorLog();
-                monitorLogWindow.Show();
+
+                MonitorLogWindow monitorLogWindow = null;
+                foreach (var window in System.Windows.Application.Current.Windows)
+                {
+                    if (window is MonitorLogWindow)
+                    {
+                        monitorLogWindow = (MonitorLogWindow)window;
+                        break;
+                    }
+                }
+                if (monitorLogWindow == null)
+                {
+                    monitorLogWindow = new MonitorLogWindow();
+                    monitorLogWindow.Show();
+                }
+                else
+                {
+                    monitorLogWindow.Activate();
+                }
             }
         }
         //删除过期日志文件
