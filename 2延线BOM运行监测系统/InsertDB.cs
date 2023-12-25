@@ -20,9 +20,7 @@ namespace _2延线BOM运行监测系统
                     if (!tableExists(mc, tableName))
                         createNewTable(mc, tableName);
                 }
-                catch (Exception)
-                {
-                }
+                catch (Exception) { }
 
                 string insertQuery = $"INSERT INTO {tableName} (时间,车站,设备号,内容) VALUES(@时间,@车站,@设备号,@内容)";
 
@@ -43,8 +41,6 @@ namespace _2延线BOM运行监测系统
                     }
                 }
             }
-
-
         }
         static bool tableExists(MySqlConnection mc, string tableName)
         {

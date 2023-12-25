@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.PerformanceData;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Threading;
 
 namespace _2延线BOM运行监测系统
 {
@@ -78,13 +80,21 @@ namespace _2延线BOM运行监测系统
                         {
                             sl.showLog($"恢复Datafile目录失败：{ex.Message}");
                         }
-                        Directory.Delete(datafileBak,true);
+                        Directory.Delete(datafileBak, true);
                     }
                     else
                     {
                         sl.showLog("未找到Datafile备份目录");
                     }
                     sl.showLog("BOM程序重装完成");
+                    ThreadPool.QueueUserWorkItem(state =>
+                    {
+                        try
+                        {
+                            InsertDB.insertDB("执行了重装BOM程序操作");
+                        }
+                        catch (Exception) { }
+                    });
                 }
                 catch (IOException ioex)
                 {

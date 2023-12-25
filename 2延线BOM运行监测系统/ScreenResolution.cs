@@ -116,14 +116,7 @@ namespace _2延线BOM运行监测系统
                             {
                                 try
                                 {
-                                    string dir = @"\\172.22.100.13\2ydata\2yBOMLog\2yBOMMonitorLog";
-                                    if (!Directory.Exists(dir))
-                                        Directory.CreateDirectory(dir);
-                                    string resolutionLogPath = Path.Combine(dir, $"{DateTime.Today.ToString("yyMMdd")}.txt");
-                                    if (!File.Exists(resolutionLogPath))
-                                        using (File.Create(resolutionLogPath)) { }
-
-                                    File.AppendAllText(resolutionLogPath, $"{DateTime.Now} {GetStationName.getStationName()}{Environment.MachineName}的副屏{i}的分辨率跳变并修复成功" + Environment.NewLine);
+                                    InsertDB.insertDB($"{Environment.MachineName}的副屏{i}的分辨率跳变并修复成功");
                                 }
                                 catch (Exception) { }
                             });

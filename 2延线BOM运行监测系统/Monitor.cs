@@ -154,17 +154,7 @@ namespace _2延线BOM运行监测系统
                     {
                         try
                         {
-                            string directoryPath = @"\\172.22.100.13\2ydata\2yBOMLog\2yBOMMonitorLog";
-                            if (!Directory.Exists(directoryPath))
-                                Directory.CreateDirectory(directoryPath);
-
-                            string eryanBOMMonitorLogPath = Path.Combine(directoryPath, $"{DateTime.Today.ToString("yyMMdd")}.txt");
-                            if (!File.Exists(eryanBOMMonitorLogPath))
-                                using (File.Create(eryanBOMMonitorLogPath)) { }
-                            string stationName = GetStationName.getStationName();
-
-                            File.AppendAllText(eryanBOMMonitorLogPath,
-                                $"{DateTime.Now} {stationName}{Environment.MachineName}程序退出并成功重启" + Environment.NewLine);
+                           InsertDB.insertDB("监测到BOM程序退出，已成功重启");
                         }
                         catch (Exception) { }
                     });
@@ -248,6 +238,5 @@ namespace _2延线BOM运行监测系统
             timer.Start();
             timerAre.WaitOne();
         }
-
     }
 }

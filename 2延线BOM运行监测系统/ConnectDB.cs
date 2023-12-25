@@ -13,8 +13,8 @@ namespace _2延线BOM运行监测系统
         {
             MySqlConnection conn;
 
-            //string server = "172.22.100.13";
-            string server = "172.22.50.11";
+            string server = "172.22.100.13";
+            //string server = "172.22.50.11";
             string database = "bom";
             string uid = "AFC";
             string password = "root";
