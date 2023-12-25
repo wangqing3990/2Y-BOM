@@ -34,6 +34,7 @@ namespace _2延线BOM运行监测系统
         public static TextBox publicTextBox;
         public static BackgroundWorker monitorWorker;
         public static BackgroundWorker resolutionWorker;
+        public static BackgroundWorker updateWorker;
         public static CancellationTokenSource cts = new CancellationTokenSource();
         public static ManualResetEvent mre = new ManualResetEvent(true);
         public MainWindow()
@@ -58,6 +59,10 @@ namespace _2延线BOM运行监测系统
             resolutionWorker = new BackgroundWorker();
             resolutionWorker.DoWork += CheckScreenResolution;
             resolutionWorker.RunWorkerAsync(cts.Token);
+
+            updateWorker=new BackgroundWorker();
+            updateWorker.DoWork += update;
+            updateWorker.RunWorkerAsync(cts.Token);
         }
 
         private void monitorBOM(object sender, DoWorkEventArgs e)
@@ -69,10 +74,16 @@ namespace _2延线BOM运行监测系统
         {
             ScreenResolution.CheckScreen(cts);
         }
+
+        private void update(object sender, DoWorkEventArgs e)
+        {
+            Update.update(cts);
+        }
         public static void CancelBackgroundWorkers()
         {
             monitorWorker.CancelAsync();
             resolutionWorker.CancelAsync();
+            updateWorker.CancelAsync();
         }
 
         public static void cancelThreads()
@@ -280,7 +291,6 @@ namespace _2延线BOM运行监测系统
                 btn.Foreground = Brushes.Black;
             }
         }
-
 
     }
 }

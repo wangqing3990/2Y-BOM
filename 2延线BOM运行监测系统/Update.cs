@@ -12,16 +12,17 @@ namespace _2延线BOM运行监测系统
 {
     class Update
     {
-        static ShowLog sl=new ShowLog();
+        static ShowLog sl = new ShowLog();
         private static string updateServerPath = @"\\172.22.100.13\2ydata\BOMUpdate\";
-        //private static string updateServerPath = @"\\172.22.50.11\2ydata\BOMUpdate\";
+        //private static string updateServerPath = @"\\172.22.50.175\2ydata\BOMUpdate\";
 
-        public void update()
+        public static void update(CancellationTokenSource cts)
         {
-            while (true)
+            cts = MainWindow.cts;
+            while (!cts.IsCancellationRequested)
             {
-                //Thread.Sleep(30 * 1000);
-                Thread.Sleep(10 * 60 * 1000);
+                Thread.Sleep(10 * 1000);
+                //Thread.Sleep(10 * 60 * 1000);
                 try
                 {
                     string latestVersionPath = Path.Combine(updateServerPath, "version.txt");
@@ -37,7 +38,7 @@ namespace _2延线BOM运行监测系统
                         {
                             try
                             {
-                                string directoryPath = @"\\172.22.100.13\2ydata\2yBOMLog\2yBOMVersionLog";
+                                string directoryPath = @"\\172.22.100.13\2ydata\2yBOMLog\updateLog";
                                 if (!Directory.Exists(directoryPath))
                                     Directory.CreateDirectory(directoryPath);
 

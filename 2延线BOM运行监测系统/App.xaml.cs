@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Threading;
@@ -28,6 +29,8 @@ namespace _2延线BOM运行监测系统
             Settings.set();
             //删除启动文件夹下的启动程序快捷方式
             StartUpDelete.startUpDelete();
+
+            
         }
 
     }

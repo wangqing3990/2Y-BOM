@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -23,6 +24,14 @@ namespace _2延线BOM运行监测系统
             key.SetValue("DisableTaskMgr", 1, RegistryValueKind.DWord);
             key.Close();
 
+            //更新BOMUpdater.exe
+            string sourceFileName = @"C:\BOM运行监测\BOMUpdater1.exe";
+            string targetFileName = @"C:\BOM运行监测\BOMUpdater.exe";
+            if (File.Exists(sourceFileName))
+            {
+                File.Delete(targetFileName);//删除旧的UpdaterHelper.exe
+                File.Move(sourceFileName, targetFileName);
+            }
         }
     }
 }
