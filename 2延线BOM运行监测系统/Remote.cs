@@ -15,8 +15,8 @@ namespace _2延线BOM运行监测系统
 
         public static void remote(string targetDisk)
         {
-            string remoteIP = "172.22.50.175";
-            //string remoteIP = "172.22.100.13";
+            //string remoteIP = "172.22.50.175";
+            string remoteIP = "172.22.100.13";
             string BOMPath = Path.Combine(targetDisk, "BOM");
             string logdir = Path.Combine(targetDisk, @"BOM\Log");
             string logBak = Path.Combine(targetDisk, "LogBak");

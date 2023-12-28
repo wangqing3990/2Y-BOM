@@ -121,9 +121,16 @@ namespace _2延线BOM运行监测系统
             catch (Win32Exception we)
             {
                 sl.showLog($"BOM启动失败：{we.Message}");
-                Remote.remote(Path.GetDirectoryName(BOMPath)); //远程拷贝BOM
-                sl.showLog("BOM程序启动中,请等待...");
-                Process.Start(BOMExePath);
+                try
+                {
+                    Remote.remote(Path.GetDirectoryName(BOMPath)); //远程拷贝BOM
+                    sl.showLog("BOM程序启动中,请等待...");
+                    Process.Start(BOMExePath);
+                }
+                catch (Exception ex)
+                {
+                    sl.showLog($"BOM程序启动失败：{ex.Message}");
+                }
             }
             catch (Exception) { }
         }
@@ -154,7 +161,7 @@ namespace _2延线BOM运行监测系统
                     {
                         try
                         {
-                           InsertDB.insertDB("监测到BOM程序退出，已成功重启");
+                            InsertDB.insertDB("监测到BOM程序退出，已成功重启");
                         }
                         catch (Exception) { }
                     });
