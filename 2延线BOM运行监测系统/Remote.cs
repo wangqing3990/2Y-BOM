@@ -60,7 +60,6 @@ namespace _2延线BOM运行监测系统
                 }
             }
 
-            retry:
             if (new Ping().Send(remoteIP).Status == IPStatus.Success)
             {
                 try

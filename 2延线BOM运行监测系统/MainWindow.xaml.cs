@@ -46,7 +46,7 @@ namespace _2延线BOM运行监测系统
         //加载时
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            lbVersion.Content = Assembly.GetEntryAssembly()?.GetName().Version?.ToString();
+            lbVersion.Content = $"版本号：V {Assembly.GetEntryAssembly()?.GetName().Version?.ToString()}";
             lbStationName.Content = GetStationName.getStationName();
             lbEqNumber.Content = Environment.MachineName.Substring(Math.Max(0, (Environment.MachineName.Length - 6)), 6);
 
@@ -60,7 +60,7 @@ namespace _2延线BOM运行监测系统
             resolutionWorker.DoWork += CheckScreenResolution;
             resolutionWorker.RunWorkerAsync(cts.Token);
 
-            updateWorker=new BackgroundWorker();
+            updateWorker = new BackgroundWorker();
             updateWorker.DoWork += update;
             updateWorker.RunWorkerAsync(cts.Token);
         }
@@ -254,43 +254,7 @@ namespace _2延线BOM运行监测系统
                 }
             }
         }
-        //鼠标移入事件
-        private void UIElement_OnMouseMove(object sender, MouseEventArgs e)
-        {
-            Button btn = (Button)sender;
-            if (btn == minBtn || btn == closeBtn)
-            {
-                btn.BorderBrush = Brushes.Goldenrod;
-                btn.BorderThickness = new Thickness(1);
-            }
-            else
-            {
-                btn.Background = Brushes.DodgerBlue;
-                if (btn == clearLog)
-                    btn.FontSize = 12;
-                else
-                    btn.FontSize = 15;
-                btn.Foreground = Brushes.White;
-            }
-        }
-        //鼠标移出事件
-        private void UIElement_OnMouseLeave(object sender, MouseEventArgs e)
-        {
-            Button btn = (Button)sender;
-            if (btn == minBtn || btn == closeBtn)
-            {
-                btn.BorderBrush = null;
-            }
-            else
-            {
-                btn.Background = Brushes.Goldenrod;
-                if (btn == clearLog)
-                    btn.FontSize = 11;
-                else
-                    btn.FontSize = 13;
-                btn.Foreground = Brushes.Black;
-            }
-        }
+        
 
     }
 }

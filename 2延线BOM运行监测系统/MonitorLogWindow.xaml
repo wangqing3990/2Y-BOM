@@ -8,7 +8,26 @@
         mc:Ignorable="d"
         Title="查询监测日志" Height="800" Width="700" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" BorderBrush="Goldenrod" BorderThickness="1" Loaded="MonitorLog_OnLoaded">
     <Window.Resources>
-
+        <Style x:Key="btnStyle" TargetType="Button" BasedOn="{StaticResource btnTrigger1}">
+            <Setter Property="FontSize" Value="16"></Setter>
+            <Setter Property="Background" Value="Goldenrod"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            <Setter Property="VerticalAlignment" Value="Top"></Setter>
+            <Setter Property="Width" Value="55"></Setter>
+            <Setter Property="Height" Value="57"></Setter>
+        </Style>
+        <Style x:Key="lbStyle" TargetType="Label">
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            <Setter Property="VerticalAlignment" Value="Top"></Setter>
+            <Setter Property="Width" Value="50"></Setter>
+            <Setter Property="Height" Value="25"></Setter>
+        </Style>
+        <Style x:Key="cbStyle" TargetType="ComboBox">
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            <Setter Property="VerticalAlignment" Value="Top"></Setter>
+            <Setter Property="Width" Value="115"></Setter>
+            <Setter Property="Height" Value="25"></Setter>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -35,24 +54,21 @@
         <Label x:Name="lbend" Content="结束时间" HorizontalAlignment="Left" Margin="2,69,0,0" VerticalAlignment="Top" Height="26" Width="60"/>
         <DatePicker x:Name="dpStart" Height="25" VerticalContentAlignment="Center" Width="115" Margin="65,36,513.6,737.4"/>
         <DatePicker x:Name="dpEnd" Height="25" VerticalContentAlignment="Center" Width="115" Margin="65,68,513.6,705.4"/>
-        <Button x:Name="allBtn" Content="查询&#xD;&#xA;所有" FontSize="16" Background="Goldenrod" HorizontalAlignment="Left" Margin="625,36,0,0" VerticalAlignment="Top" Width="55" Height="57" 
-                Click="button_Click" MouseLeave="UIElement_OnMouseLeave" MouseMove="UIElement_OnMouseMove"/>
-        <Button x:Name="cdnBtn" Content="条件&#xD;&#xA;查询" FontSize="16" Background="Goldenrod" HorizontalAlignment="Left" Margin="546,36,0,0" VerticalAlignment="Top" Width="55" Height="57" 
-                Click="button_Click" MouseLeave="UIElement_OnMouseLeave" MouseMove="UIElement_OnMouseMove"/>
-        <ComboBox x:Name="cbStation" HorizontalAlignment="Left" Margin="236,36,0,0" VerticalAlignment="Top" Width="115" Height="25" KeyDown="comBox_OnKeyDown"/>
-        <ComboBox x:Name="cbEq" HorizontalAlignment="Left" Margin="236,68,0,0" VerticalAlignment="Top" Width="115" Height="25" KeyDown="comBox_OnKeyDown"/>
-        <ComboBox x:Name="cbType" HorizontalAlignment="Left" Margin="402,36,0,0" VerticalAlignment="Top" Width="115" Height="25" KeyDown="comBox_OnKeyDown"/>
-        <Label Content="车   站" HorizontalAlignment="Left" Margin="183,36,0,0" VerticalAlignment="Top" Width="50" Height="25"/>
-        <Label Content="设   备" HorizontalAlignment="Left" Margin="183,69,0,0" VerticalAlignment="Top" Height="25" Width="50"/>
-        <Label Content="类   型" HorizontalAlignment="Left" Margin="351,36,0,0" VerticalAlignment="Top" Width="50" Height="26"/>
+        <Button x:Name="allBtn" Content="查询&#xD;&#xA;所有" Style="{StaticResource btnStyle}" Margin="625,36,0,0" Click="button_Click"/>
+        <Button x:Name="cdnBtn" Content="条件&#xD;&#xA;查询" Style="{StaticResource btnStyle}" Margin="546,36,0,0" Click="button_Click"/>
+        <ComboBox x:Name="cbStation" Style="{StaticResource cbStyle}" Margin="236,36,0,0" KeyDown="comBox_OnKeyDown"/>
+        <ComboBox x:Name="cbEq" Style="{StaticResource cbStyle}" Margin="236,68,0,0" KeyDown="comBox_OnKeyDown"/>
+        <ComboBox x:Name="cbType" Style="{StaticResource cbStyle}" Margin="402,36,0,0" KeyDown="comBox_OnKeyDown"/>
+        <Label Content="车   站" Style="{StaticResource lbStyle}" Margin="183,36,0,0"/>
+        <Label Content="类   型" Style="{StaticResource lbStyle}" Margin="351,36,0,0"/>
+        <Label Content="设   备" Style="{StaticResource lbStyle}" Margin="183,69,0,0"/>
+        <Label Content="类   型" Style="{StaticResource lbStyle}" Margin="351,36,0,0"/>
         <Grid Height="30" Background="White" VerticalAlignment="Top" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown">
             <Image Source="imgs/SG.ico" HorizontalAlignment="Left" Margin="10,0"/>
             <Label Height="30" Content="查询监测日志" FontSize="17" Foreground="Goldenrod" Margin="40,0,533,0"/>
-            <Button Name="closeBtn" Content="X" FontSize="25" Width="30" Height="30" Background="Transparent" Foreground="Goldenrod" BorderThickness="0" HorizontalAlignment="Right" 
-        		Margin="0,0,10,0" MouseLeave="UIElement_OnMouseLeave" MouseMove="UIElement_OnMouseMove" Click="button_Click"/>
+            <Button Name="closeBtn" Content="X" Style="{StaticResource BtnCloseStyle}" FontSize="18" Width="30" Height="30" Margin="5,0" Click="button_Click"/>
         </Grid>
-        <Button x:Name="delBtn" Content="删除选中行" HorizontalAlignment="Left" Margin="402,68,0,0" VerticalAlignment="Top" Width="115" Height="25" Background="Goldenrod" FontSize="15"
-                MouseMove="UIElement_OnMouseMove" MouseLeave="UIElement_OnMouseLeave" Click="button_Click"/>
+        <Button x:Name="delBtn" Content="删除选中行" Margin="402,68,0,0" Width="115" Height="25" FontSize="15" Click="button_Click" Style="{StaticResource btnStyle}"/>
         <Label Name="lineNumber" Content="行数：" HorizontalAlignment="Left" Margin="5,773,0,-0.6" VerticalAlignment="Center"/>
 
     </Grid>

@@ -53,7 +53,7 @@ namespace _2延线BOM运行监测系统
                     {
                         ClearMyTracks();
                     }
-                    catch (Exception ex) { }
+                    catch (Exception) { }
 
                     ResetInternetExplorerSettings(null);
                 }

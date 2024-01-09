@@ -155,7 +155,7 @@ namespace _2延线BOM运行监测系统
                             lineNumber.Content = $"行数：{dataGrid.Items.Count}";
                         }));
                     }
-                    catch (Exception ex) { }
+                    catch (Exception) { }
                 }
                 else
                 {
@@ -166,7 +166,7 @@ namespace _2延线BOM运行监测系统
             //删除选中行按钮
             if (btn == delBtn)
             {
-                if (dataGrid.SelectedItems.Count==0) return;
+                if (dataGrid.SelectedItems.Count == 0) return;
 
                 var result = MessageBox.Show("确定删除所有选中的行？这会同时删除数据库里的数据，请谨慎操作！", "警告", MessageBoxButtons.OKCancel,
                      MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
@@ -232,35 +232,6 @@ namespace _2延线BOM运行监测系统
         private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
-        }
-
-        private void UIElement_OnMouseMove(object sender, MouseEventArgs e)
-        {
-            Button btn = (Button)sender;
-            if (btn == closeBtn)
-            {
-                btn.BorderBrush = Brushes.Goldenrod;
-                btn.BorderThickness = new Thickness(1);
-            }
-            if (btn == allBtn || btn == cdnBtn || btn == delBtn)
-            {
-                btn.Background = Brushes.DodgerBlue;
-                btn.Foreground = Brushes.White;
-            }
-        }
-
-        private void UIElement_OnMouseLeave(object sender, MouseEventArgs e)
-        {
-            Button btn = (Button)sender;
-            if (btn == closeBtn)
-            {
-                btn.BorderBrush = null;
-            }
-            if (btn == allBtn || btn == cdnBtn || btn == delBtn)
-            {
-                btn.Background = Brushes.Goldenrod;
-                btn.Foreground = Brushes.Black;
-            }
         }
 
         private void comBox_OnKeyDown(object sender, KeyEventArgs e)
