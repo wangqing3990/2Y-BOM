@@ -60,7 +60,7 @@
         <Label x:Name="lbStationName" Width="138" Style="{StaticResource lbStyle2}" Content="独墅湖邻里中心" Margin="57,113,0,0"/>
         <Label x:Name="lbEqNumber" Content="BOM001" Style="{StaticResource lbStyle2}" Margin="77,146,0,0" Width="96"/>
         <StackPanel Height="25" VerticalAlignment="Bottom" Width="700">
-            <Label x:Name="lbVersion" Content="版本号：V 1.0.0.1218" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalContentAlignment="Top" Height="25" Width="140"/>
+            <Label x:Name="lbVersion" Content="版本号：V 1.0.0.1000" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalContentAlignment="Top" Height="25" Width="140"/>
         </StackPanel>
 
     </Grid>

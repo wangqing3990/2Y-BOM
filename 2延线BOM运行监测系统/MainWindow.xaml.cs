@@ -123,17 +123,31 @@ namespace _2延线BOM运行监测系统
             {
                 ThreadPool.QueueUserWorkItem(state =>
                 {
-                    ResetIE.resetIE();
+                    try
+                    {
+                        ResetIE.resetIE();
+                    }
+                    catch (Exception ex)
+                    {
+                        sl.showLog($"重置IE失败：{ex.Message}");
+                    }
                 });
             }
             if (btn == diskBtn)//磁盘修复按钮
             {
                 ThreadPool.QueueUserWorkItem(state =>
                 {
-                    if (Directory.Exists(@"D:\"))
-                        Chkdsk.StartChkdsk("D");
-                    else
-                        Chkdsk.StartChkdsk("C");
+                    try
+                    {
+                        if (Directory.Exists(@"D:\"))
+                            Chkdsk.StartChkdsk("D");
+                        else
+                            Chkdsk.StartChkdsk("C");
+                    }
+                    catch (Exception ex)
+                    {
+                        sl.showLog($"修复磁盘失败：{ex.Message}");
+                    }
                 });
             }
             if (btn == restartBOM)//重启BOM按钮
@@ -154,10 +168,17 @@ namespace _2延线BOM运行监测系统
                         MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                     if (result == System.Windows.Forms.DialogResult.OK)
                     {
-                        if (Directory.Exists(@"D:\"))
-                            Remote.remote(@"D:\");
-                        else
-                            Remote.remote(@"C:\");
+                        try
+                        {
+                            if (Directory.Exists(@"D:\"))
+                                Remote.remote(@"D:\");
+                            else
+                                Remote.remote(@"C:\");
+                        }
+                        catch (Exception ex)
+                        {
+                            sl.showLog($"重装BOM程序失败：{ex.Message}");
+                        }
                     }
                 });
             }
@@ -197,11 +218,18 @@ namespace _2延线BOM运行监测系统
                 ThreadPool.QueueUserWorkItem(state =>
                 {
                     sl.showLog("开始清理30天前的日志文件和交易数据文件...");
-                    if (Directory.Exists(@"D:\"))
-                        DeleteFilesOlderThanOneMonth(@"D:\BOM\Log", @"D:\BOM\Datafile");
-                    else
-                        DeleteFilesOlderThanOneMonth(@"C:\BOM\Log", @"C:\BOM\Datafile");
-                    sl.showLog("清理结束，如果有反复删除不掉的请执行[磁盘修复]按钮");
+                    try
+                    {
+                        if (Directory.Exists(@"D:\"))
+                            DeleteFilesOlderThanOneMonth(@"D:\BOM\Log", @"D:\BOM\Datafile");
+                        else
+                            DeleteFilesOlderThanOneMonth(@"C:\BOM\Log", @"C:\BOM\Datafile");
+                        sl.showLog("清理结束，如果有反复删除不掉的请执行[磁盘修复]按钮");
+                    }
+                    catch (Exception ex)
+                    {
+                        sl.showLog($"清理失败：{ex.Message}");
+                    }
                 });
             }
             if (btn == monitorLogBtn)//监测日志按钮
@@ -254,7 +282,7 @@ namespace _2延线BOM运行监测系统
                 }
             }
         }
-        
+
 
     }
 }
