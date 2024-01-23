@@ -66,6 +66,7 @@ namespace _2延线BOM运行监测系统
         const int DISP_CHANGE_SUCCESSFUL = 0; //设置成功
         const int DISP_CHANGE_RESTART = 1; //需要重启
         const int DISP_CHANGE_FAILED = -1; //设置失败
+        const int DISP_CHANGE_BADMODE = -2;//显示模式不可用
 
 
         //定义API函数，用于获取和设置分辨率
@@ -77,9 +78,7 @@ namespace _2延线BOM运行监测系统
         //[DllImport("user32.dll")]
         //static extern int ChangeDisplaySettings(ref DEVMODE devMode, int flags);
 
-        //private static bool isShown = false;
-
-
+        static bool isShown = false;
         //定义监测函数
         static void monitoring(int i, ref DEVMODE devMode, int width, int height, Screen[] screens)
         {
@@ -93,21 +92,30 @@ namespace _2延线BOM运行监测系统
 
                 if (devMode.dmPelsWidth != width || devMode.dmPelsHeight != height) //如果分辨率跳变，就尝试修改
                 {
-                    //ShowLog.showLog($"监测到副屏{i}的分辨率跳变！");
-                    //Console.WriteLine(DateTime.Now + $" 尝试将副屏{i}的分辨率修改为：{width} x {height}");
                     devMode.dmPelsWidth = width;
                     devMode.dmPelsHeight = height;
+
                     int result = ChangeDisplaySettingsEx(screens[i - 1].DeviceName, ref devMode, IntPtr.Zero, CDS_TEST, IntPtr.Zero); //测试是否可以修改
                     if (result == DISP_CHANGE_FAILED) //如果失败，提示用户
                     {
-                        sl.showLog($"监测到副屏{i}的分辨率跳变！无法修改副屏{i}的分辨率");
+                        sl.showLog($"监测到副屏{i}的分辨率跳变！无法修改副屏{i}的分辨率！");
+                    }
+                    else if (result == DISP_CHANGE_BADMODE)
+                    {
+                        if (!isShown)
+                        {
+                            EnumDisplaySettings(screens[i - 1].DeviceName, ENUM_CURRENT_SETTINGS, ref devMode);
+                            sl.showLog($"监测到副屏{i}的分辨率跳变！无法修改副屏{i}的分辨率！副屏{i}的分辨率应为：{width}*{height}," +
+                                       $"当前为{devMode.dmPelsWidth}*{devMode.dmPelsHeight},请检查副屏{i}硬件是否支持此分辨率");
+                            isShown = true;
+                        }
                     }
                     else //如果成功，更新注册表并提示用户
                     {
                         ChangeDisplaySettingsEx(screens[i - 1].DeviceName, ref devMode, IntPtr.Zero, CDS_UPDATEREGISTRY, IntPtr.Zero);
                         if (result == DISP_CHANGE_RESTART) //如果需要重启，提示用户
                         {
-                            sl.showLog("监测到副屏{i}的分辨率跳变！修改成功，请重启电脑以应用更改");
+                            sl.showLog("监测到副屏{i}的分辨率跳变！修改成功，请重启电脑以应用更改！");
                         }
                         else //如果不需要重启，提示用户
                         {
@@ -117,6 +125,7 @@ namespace _2延线BOM运行监测系统
                                 try
                                 {
                                     InsertDB.insertDB($"{Environment.MachineName}的副屏{i}的分辨率跳变并修复成功");
+                                    isShown = false;
                                 }
                                 catch (Exception) { }
                             });

@@ -41,6 +41,10 @@ namespace _2延线BOM运行监测系统
                 string station = octets[2];
                 switch (station)
                 {
+                    case "19":
+                        return "骑河";
+                    case "20":
+                        return "富翔路";
                     case "43":
                         return "尹中路";
                     case "44":

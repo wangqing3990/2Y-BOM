@@ -8,26 +8,7 @@
         mc:Ignorable="d"
         Title="查询监测日志" Height="800" Width="700" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" BorderBrush="Goldenrod" BorderThickness="1" Loaded="MonitorLog_OnLoaded">
     <Window.Resources>
-        <Style x:Key="btnStyle" TargetType="Button" BasedOn="{StaticResource btnTrigger1}">
-            <Setter Property="FontSize" Value="16"></Setter>
-            <Setter Property="Background" Value="Goldenrod"></Setter>
-            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
-            <Setter Property="VerticalAlignment" Value="Top"></Setter>
-            <Setter Property="Width" Value="55"></Setter>
-            <Setter Property="Height" Value="57"></Setter>
-        </Style>
-        <Style x:Key="lbStyle" TargetType="Label">
-            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
-            <Setter Property="VerticalAlignment" Value="Top"></Setter>
-            <Setter Property="Width" Value="50"></Setter>
-            <Setter Property="Height" Value="25"></Setter>
-        </Style>
-        <Style x:Key="cbStyle" TargetType="ComboBox">
-            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
-            <Setter Property="VerticalAlignment" Value="Top"></Setter>
-            <Setter Property="Width" Value="115"></Setter>
-            <Setter Property="Height" Value="25"></Setter>
-        </Style>
+        
     </Window.Resources>
 
     <Grid>
@@ -66,7 +47,7 @@
         <Grid Height="30" Background="White" VerticalAlignment="Top" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown">
             <Image Source="imgs/SG.ico" HorizontalAlignment="Left" Margin="10,0"/>
             <Label Height="30" Content="查询监测日志" FontSize="17" Foreground="Goldenrod" Margin="40,0,533,0"/>
-            <Button Name="closeBtn" Content="X" Style="{StaticResource BtnCloseStyle}" FontSize="18" Width="30" Height="30" Margin="5,0" Click="button_Click"/>
+            <Button Name="closeBtn" Content="X" Style="{StaticResource BtnCloseStyle}" ToolTip="关闭" FontSize="18" Width="30" Height="30" Margin="5,0" Click="button_Click"/>
         </Grid>
         <Button x:Name="delBtn" Content="删除选中行" Margin="402,68,0,0" Width="115" Height="25" FontSize="15" Click="button_Click" Style="{StaticResource btnStyle}"/>
         <Label Name="lineNumber" Content="行数：" HorizontalAlignment="Left" Margin="5,773,0,-0.6" VerticalAlignment="Center"/>

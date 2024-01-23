@@ -47,10 +47,8 @@ namespace _2延线BOM运行监测系统
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             lbVersion.Content = $"版本号：V {Assembly.GetEntryAssembly()?.GetName().Version?.ToString()}";
-            lbStationName.Content = GetStationName.getStationName();
-            lbEqNumber.Content = Environment.MachineName.Substring(Math.Max(0, (Environment.MachineName.Length - 6)), 6);
 
-            getCurrentDateTime();
+            getCurrentDateTimeStationNameAndEqnumber();
 
             monitorWorker = new BackgroundWorker();
             monitorWorker.DoWork += monitorBOM;
@@ -90,21 +88,34 @@ namespace _2延线BOM运行监测系统
         {
             cts.Cancel();
         }
-        //显示当前日期时间
-        private void getCurrentDateTime()
+
+        //每秒获取一次当前日期时间、车站名和设备号
+        private Timer timer;
+        private void getCurrentDateTimeStationNameAndEqnumber()
         {
-            Timer t = new Timer();
-            t.Interval = 1000;
-            t.Elapsed += (s1, e1) =>
+            timer = new Timer();
+            timer.Interval = 1000;
+            timer.Elapsed += (s1, e1) =>
             {
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    lbDate.Content = DateTime.Now.ToString("yyyy-MM-dd");
-                    lbTime.Content = DateTime.Now.ToString("HH:mm:ss");
+                    try
+                    {
+                        lbDate.Content = DateTime.Now.ToString("yyyy-MM-dd");
+                        lbTime.Content = DateTime.Now.ToString("HH:mm:ss");
+                        lbStationName.Content = GetStationName.getStationName();
+                        if (lbStationName.Content.ToString() == "获取失败")
+                            lbStationName.Foreground = Brushes.Red;
+                        else
+                            lbStationName.Foreground = Brushes.DodgerBlue;
+                        lbEqNumber.Content = Environment.MachineName.Substring(Math.Max(0, (Environment.MachineName.Length - 6)), 6);
+                    }
+                    catch (Exception) { }
                 }));
             };
-            t.Start();
+            timer.Start();
         }
+
         //顶部鼠标按下移动窗口
         private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -119,6 +130,7 @@ namespace _2延线BOM运行监测系统
             {
                 WindowState = WindowState.Minimized;
             }
+
             if (btn == ieBtn)//重置IE按钮
             {
                 ThreadPool.QueueUserWorkItem(state =>
@@ -133,6 +145,7 @@ namespace _2延线BOM运行监测系统
                     }
                 });
             }
+
             if (btn == diskBtn)//磁盘修复按钮
             {
                 ThreadPool.QueueUserWorkItem(state =>
@@ -150,6 +163,7 @@ namespace _2延线BOM运行监测系统
                     }
                 });
             }
+
             if (btn == restartBOM)//重启BOM按钮
             {
                 ThreadPool.QueueUserWorkItem(state =>
@@ -160,6 +174,7 @@ namespace _2延线BOM运行监测系统
                         MessageBox.Show("BOM程序正在运行中！");
                 });
             }
+
             if (btn == reinstallBOM)//重装BOM按钮
             {
                 ThreadPool.QueueUserWorkItem(state =>
@@ -182,21 +197,29 @@ namespace _2延线BOM运行监测系统
                     }
                 });
             }
-            if (btn == stopMonitor)//暂停监测按钮
+
+            if (btn == changeHostname)//修改主机名按钮
             {
-                if (btn.Content.Equals("暂停监测"))
+                ChangeHostWindow changeHostWindow = null;
+                foreach (var window in System.Windows.Application.Current.Windows)
                 {
-                    btn.Content = "恢复监测";
-                    Monitor.sl.showLog("暂停监测BOM进程");
-                    Monitor.monitorMre.Reset();
+                    if (window is ChangeHostWindow)
+                    {
+                        changeHostWindow = (ChangeHostWindow)window;
+                        break;
+                    }
                 }
-                else if (btn.Content.Equals("恢复监测"))
+                if (changeHostWindow==null)
                 {
-                    Monitor.sl.showLog("恢复监测BOM进程");
-                    Monitor.monitorMre.Set();
-                    btn.Content = "暂停监测";
+                    changeHostWindow=new ChangeHostWindow();
+                    changeHostWindow.Show();
+                }
+                else
+                {
+                    changeHostWindow.Activate();
                 }
             }
+
             if (btn == initTPU)//初始化发卡按钮
             {
                 sl.showLog("开始执行初始化发卡模块");
@@ -213,6 +236,7 @@ namespace _2延线BOM运行监测系统
                     }
                 });
             }
+
             if (btn == clearLog)//清理过期日志按钮
             {
                 ThreadPool.QueueUserWorkItem(state =>
@@ -232,9 +256,9 @@ namespace _2延线BOM运行监测系统
                     }
                 });
             }
+
             if (btn == monitorLogBtn)//监测日志按钮
             {
-
                 MonitorLogWindow monitorLogWindow = null;
                 foreach (var window in System.Windows.Application.Current.Windows)
                 {

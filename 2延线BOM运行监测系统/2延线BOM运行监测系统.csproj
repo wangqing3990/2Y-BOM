@@ -82,6 +82,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ChangeHostWindow.xaml.cs">
+      <DependentUpon>ChangeHostWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ConnectDB.cs" />
     <Compile Include="Copy.cs" />
     <Compile Include="GetStationName.cs" />
@@ -99,6 +102,10 @@
     <Compile Include="ShowLog.cs" />
     <Compile Include="StartUpDelete.cs" />
     <Compile Include="Update.cs" />
+    <Page Include="ChangeHostWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -113,6 +120,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MonitorLogWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="res\CommonResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="res\MainWindowResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="res\MonitorLogWindowResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
