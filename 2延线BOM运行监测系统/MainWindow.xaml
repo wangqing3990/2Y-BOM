@@ -34,7 +34,7 @@
             <Button Content="重装BOM" x:Name="reinstallBOM" Style="{StaticResource btnStyle1}" HorizontalAlignment="Left" Margin="10,7" Click="ButtonBase_OnClick"/>
             <Button Content="重置IE" x:Name="ieBtn" Style="{StaticResource btnStyle1}" Click="ButtonBase_OnClick"/>
             <Button Content="监测日志" x:Name="monitorLogBtn" Style="{StaticResource btnStyle1}" Click="ButtonBase_OnClick"/>
-            <Button Content="修改主机名" x:Name="changeHostname" Style="{StaticResource btnStyle1}" Click="ButtonBase_OnClick"/>
+            <Button Content="改IP主机名" x:Name="changeHostname" Style="{StaticResource btnStyle1}" Click="ButtonBase_OnClick"/>
         </StackPanel>
 
         <Label  Content="车站：" FontSize="18" Margin="6,113,0,0" Width="66" Style="{StaticResource lbStyle1}"/>

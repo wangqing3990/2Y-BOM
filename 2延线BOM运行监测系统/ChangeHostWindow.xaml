@@ -4,56 +4,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_2延线BOM运行监测系统"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="修改计算机名" Height="280" Width="300" WindowStyle="None" WindowStartupLocation="CenterScreen" Background="White" ResizeMode="NoResize"
-        BorderBrush="Goldenrod" BorderThickness="1">
+        Title="修改计算机名" Height="340" Width="300" WindowStyle="None" WindowStartupLocation="CenterScreen" Background="White" ResizeMode="NoResize"
+        BorderBrush="Goldenrod" BorderThickness="1" Loaded="ChangeHostWindow_OnLoaded">
     <Window.Resources>
-        <ControlTemplate x:Key="validationTemplate">
-            <DockPanel>
-                <TextBlock
-                   Margin="1,2"
-                    DockPanel.Dock="Right"
-                   FontSize="{DynamicResource ResourceKey=Heading4}"
-                   FontWeight="Bold"
-                   Foreground="Red"
-                   Text="" />
-                <AdornedElementPlaceholder />
-            </DockPanel>
-        </ControlTemplate>
-        <Style x:Key="CustomTextBoxTextStyle" TargetType="TextBox">
-            <Setter Property="MaxLength" Value="3" />
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Style.Triggers>
-                <Trigger Property="Validation.HasError" Value="True">
-                    <Trigger.Setters>
-                        <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
-                        <Setter Property="BorderBrush" Value="Red" />
-                        <Setter Property="Background" Value="Red" />
-                    </Trigger.Setters>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+
     </Window.Resources>
 
     <Grid>
-        <Grid Height="30" VerticalAlignment="Top" Background="White" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown">
-            <Label Content="示例：郭巷BOM1 -> GXBOM001" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="DarkGoldenrod" FontWeight="Medium" 
-               FontSize="15" Margin="15,0,0,0"/>
+        <Grid Height="40" VerticalAlignment="Top" Background="White" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown">
+            <Label Content="示例：独墅湖南BOM1 -> DSHNBOM001" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="DarkGoldenrod" FontWeight="Medium" Height="40" VerticalContentAlignment="Center"
+               FontSize="15"/>
         </Grid>
-        <TextBox x:Name="tbHostname" HorizontalAlignment="Left" Height="35" Margin="20,62,0,0" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="252"
-                 FontSize="15" VerticalContentAlignment="Center" Padding="5,0"/>
+        
+        <StackPanel Orientation="Vertical" Height="250" VerticalAlignment="Top" Margin="0,40">
+            <Label Content="请按照示例格式输入计算机名:" FontSize="14" Foreground="DodgerBlue" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,0"/>
+            <TextBox x:Name="tbHostname" HorizontalAlignment="Left" Height="35" TextWrapping="NoWrap" Text="" Width="250" Margin="24,0,0,0" FontSize="15" VerticalContentAlignment="Center" Padding="5,0"/>
+            <Label Content="IPv4地址:" FontSize="14" Foreground="DodgerBlue" HorizontalAlignment="Left" Margin="25,0"/>
+            <local:UserControl1 x:Name="uc_ip" Height="35" Width="250" BorderBrush="#ABADB3"/>
+            <Label Content="子网掩码:" FontSize="14" Foreground="DodgerBlue" HorizontalAlignment="Left" Margin="25,0"/>
+            <local:UserControl1 x:Name="uc_subnetmask" Height="35" Width="250" BorderBrush="#ABADB3"/>
+            <Label Content="默认网关:" FontSize="14" Foreground="DodgerBlue" HorizontalAlignment="Left" Margin="25,0"/>
+            <local:UserControl1 x:Name="uc_gateway" Height="35" Width="250" BorderBrush="#ABADB3"/>
+        </StackPanel>
+        
+        
         <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Bottom" Margin="0,8">
             <Button x:Name="btnOK" Content="确定" Style="{StaticResource btnStyle1}" Margin="35,0" Height="30" Click="ButtonBase_OnClick"/>
             <Button x:Name="btnCancel" Content="取消" Style="{StaticResource btnStyle1}" Margin="25,0" Height="30" Click="ButtonBase_OnClick"/>
         </StackPanel>
-        <Label Content="请按照示例格式输入计算机名：" FontSize="14" Foreground="DodgerBlue" HorizontalAlignment="Left" Margin="20,31,0,0" VerticalAlignment="Top"/>
-        <Label Content="IP 地址：" FontSize="14" Foreground="DodgerBlue" HorizontalAlignment="Left" Margin="20,98,0,0" VerticalAlignment="Top"/>
-        <Label Content="默认网关：" FontSize="14" Foreground="DodgerBlue" HorizontalAlignment="Left" Margin="20,163,0,0" VerticalAlignment="Top"/>
-
-        <TextBox x:Name="tbGateway" HorizontalAlignment="Left" Height="35" Margin="20,191,0,0" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="252"
-        	FontSize="15" VerticalContentAlignment="Center" Padding="5,0"/>
-
-
     </Grid>
 </Window>

@@ -26,4 +26,22 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style x:Key="TextBoxWithoutBorderStyle" TargetType="TextBox">
+        <Setter Property="BorderThickness" Value="0"></Setter>
+        <Setter Property="Height" Value="35"></Setter>
+        <Setter Property="FontSize" Value="15"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="InputMethod.IsInputMethodEnabled" Value="False"></Setter>
+        <Setter Property="MaxLength" Value="3"></Setter>
+    </Style>
+
+    <Style x:Key="LabelDotStyle" TargetType="Label">
+        <Setter Property="Height" Value="35"></Setter>
+        <Setter Property="Content" Value="."></Setter>
+        <Setter Property="FontWeight" Value="Bold"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+    </Style>
 </ResourceDictionary>
