@@ -6,15 +6,17 @@ using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.Forms.MessageBox;
+using MessageBoxOptions = System.Windows.Forms.MessageBoxOptions;
 
 namespace _2延线BOM运行监测系统
 {
@@ -59,15 +61,22 @@ namespace _2延线BOM运行监测系统
                             MessageBox.Show($"修改IP地址出错：{ex.Message}");
                         }
                     }
-
-                    try
+                    else
                     {
-                        changeHostname();
-                        this.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"修改计算机名出错：{ex.Message}");
+                        var result = MessageBox.Show("未输入完整的IP地址，是否仅修改计算机名？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question,
+                             MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                        if (result == System.Windows.Forms.DialogResult.OK)
+                        {
+                            try
+                            {
+                                changeHostname();
+                                this.Close();
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"修改计算机名出错：{ex.Message}");
+                            }
+                        }
                     }
                 }
                 else

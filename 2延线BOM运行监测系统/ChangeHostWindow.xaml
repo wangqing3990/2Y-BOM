@@ -18,7 +18,7 @@
                FontSize="15"/>
         </Grid>
         
-        <StackPanel Orientation="Vertical" Height="250" VerticalAlignment="Top" Margin="0,40">
+        <StackPanel Orientation="Vertical" Height="255" VerticalAlignment="Top" Margin="0,40">
             <Label Content="请按照示例格式输入计算机名:" FontSize="14" Foreground="DodgerBlue" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,0"/>
             <TextBox x:Name="tbHostname" HorizontalAlignment="Left" Height="35" TextWrapping="NoWrap" Text="" Width="250" Margin="24,0,0,0" FontSize="15" VerticalContentAlignment="Center" Padding="5,0"/>
             <Label Content="IPv4地址:" FontSize="14" Foreground="DodgerBlue" HorizontalAlignment="Left" Margin="25,0"/>
