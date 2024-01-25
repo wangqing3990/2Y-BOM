@@ -20,9 +20,9 @@ namespace _2延线BOM运行监测系统
         public ChangeHostWindow()
         {
             InitializeComponent();
-            uc_ip.TbxIP1.TextChanged += (s, e) => { uc_gateway.TbxIP1.Text = uc_ip.TbxIP1.Text.ToString(); };
-            uc_ip.TbxIP2.TextChanged += (s, e) => { uc_gateway.TbxIP2.Text = uc_ip.TbxIP2.Text.ToString(); };
-            uc_ip.TbxIP3.TextChanged += (s, e) => { uc_gateway.TbxIP3.Text = uc_ip.TbxIP3.Text.ToString(); };
+            uc_ip.TbxIP1.TextChanged += (s, e) => { uc_gateway.TbxIP1.Text = uc_ip.TbxIP1.Text; };
+            uc_ip.TbxIP2.TextChanged += (s, e) => { uc_gateway.TbxIP2.Text = uc_ip.TbxIP2.Text; };
+            uc_ip.TbxIP3.TextChanged += (s, e) => { uc_gateway.TbxIP3.Text = uc_ip.TbxIP3.Text; };
             uc_ip.TbxIP4.TextChanged += (s, e) => { uc_gateway.TbxIP4.Text = "254"; };
         }
 

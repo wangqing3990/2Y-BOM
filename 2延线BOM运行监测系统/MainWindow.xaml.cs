@@ -1,25 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Windows;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.Forms.MessageBox;
 using MessageBoxOptions = System.Windows.Forms.MessageBoxOptions;
-using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using TextBox = System.Windows.Controls.TextBox;
 using Timer = System.Timers.Timer;
 
@@ -105,9 +96,14 @@ namespace _2延线BOM运行监测系统
                         lbTime.Content = DateTime.Now.ToString("HH:mm:ss");
                         lbStationName.Content = GetStationName.getStationName();
                         if (lbStationName.Content.ToString() == "获取失败")
+                        {
                             lbStationName.Foreground = Brushes.Red;
+                        }
                         else
+                        {
                             lbStationName.Foreground = Brushes.DodgerBlue;
+                        }
+
                         lbEqNumber.Content = Environment.MachineName.Substring(Math.Max(0, (Environment.MachineName.Length - 6)), 6);
                     }
                     catch (Exception) { }
@@ -153,9 +149,13 @@ namespace _2延线BOM运行监测系统
                     try
                     {
                         if (Directory.Exists(@"D:\"))
+                        {
                             Chkdsk.StartChkdsk("D");
+                        }
                         else
+                        {
                             Chkdsk.StartChkdsk("C");
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -169,9 +169,13 @@ namespace _2延线BOM运行监测系统
                 ThreadPool.QueueUserWorkItem(state =>
                 {
                     if (Process.GetProcessesByName("Suzhou.APP.BOM").Length == 0)
+                    {
                         Monitor.startBOM();
+                    }
                     else
+                    {
                         MessageBox.Show("BOM程序正在运行中！");
+                    }
                 });
             }
 
@@ -186,9 +190,13 @@ namespace _2延线BOM运行监测系统
                         try
                         {
                             if (Directory.Exists(@"D:\"))
+                            {
                                 Remote.remote(@"D:\");
+                            }
                             else
+                            {
                                 Remote.remote(@"C:\");
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -209,9 +217,9 @@ namespace _2延线BOM运行监测系统
                         break;
                     }
                 }
-                if (changeHostWindow==null)
+                if (changeHostWindow == null)
                 {
-                    changeHostWindow=new ChangeHostWindow();
+                    changeHostWindow = new ChangeHostWindow();
                     changeHostWindow.Show();
                 }
                 else
@@ -245,9 +253,14 @@ namespace _2延线BOM运行监测系统
                     try
                     {
                         if (Directory.Exists(@"D:\"))
+                        {
                             DeleteFilesOlderThanOneMonth(@"D:\BOM\Log", @"D:\BOM\Datafile");
+                        }
                         else
+                        {
                             DeleteFilesOlderThanOneMonth(@"C:\BOM\Log", @"C:\BOM\Datafile");
+                        }
+
                         sl.showLog("清理结束，如果有反复删除不掉的请执行[磁盘修复]按钮");
                     }
                     catch (Exception ex)

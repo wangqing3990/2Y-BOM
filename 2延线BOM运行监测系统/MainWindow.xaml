@@ -8,19 +8,24 @@
         Title="BOM运行监测"  Height="405" Width="700" BorderBrush="Goldenrod" BorderThickness="1" Background="White" WindowStyle="None" ResizeMode="NoResize" 
         Icon="imgs/SG.ico" Loaded="MainWindow_OnLoaded" WindowStartupLocation="CenterScreen" >
     <Window.Resources>
-        
+
     </Window.Resources>
 
     <Grid>
-        <Grid Height="40" Background="White" VerticalAlignment="Top" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown">
-            <Image Source="imgs/SG.ico" Width="40" Height="40" Margin="205,0,0,0" HorizontalAlignment="Left"/>
+        <Grid Background="LightYellow">
+            <Grid.Effect>
+                <BlurEffect Radius="200"></BlurEffect>
+            </Grid.Effect>
+        </Grid>
+        <Grid Height="40" Background="Transparent" VerticalAlignment="Top" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown">
+            <Image Source="imgs/SG.png" Width="40" Height="40" Margin="205,0,0,0" HorizontalAlignment="Left"/>
             <Label Height="40" Content="2延线BOM运行监测系统" FontSize="22" Margin="250,0,180,0" Foreground="Goldenrod" VerticalContentAlignment="Center"/>
             <Button x:Name="closeBtn" Style="{StaticResource BtnCloseStyle}" Content="X" ToolTip="关闭" FontSize="25" Click="ButtonBase_OnClick"/>
             <Button x:Name="minBtn" Style="{StaticResource BtnCloseStyle}" Content="-" ToolTip="最小化" FontSize="30" FontWeight="Bold" Margin="0,0,40,0" Click="ButtonBase_OnClick"/>
         </Grid>
         <!--<Line Stroke="LightGray" StrokeThickness="0.8" X1="0" Y1="40" X2="700" Y2="40"></Line>-->
         <TextBox x:Name="tbShowLog" Height="334" Margin="200,45,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" VerticalScrollBarVisibility="Auto"
-                 Width="490" IsReadOnly="True" BorderBrush="Gold" BorderThickness="1"/>
+                 Width="490" IsReadOnly="True" BorderBrush="Gold" BorderThickness="1" Background="Transparent"/>
         <Label x:Name="lbDate" Content="2000-11-11" FontSize="26" Margin="18,38,0,0" Style="{StaticResource lbStyle1}"/>
         <Label x:Name="lbTime" Content="00：00：00" FontSize="30" Margin="18,66,0,0" Style="{StaticResource lbStyle1}"/>
 
@@ -44,6 +49,7 @@
         <StackPanel Height="25" VerticalAlignment="Bottom" Width="700">
             <Label x:Name="lbVersion" Content="版本号：V 1.0.0.1000" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalContentAlignment="Top" Height="25" Width="140"/>
         </StackPanel>
+
 
     </Grid>
 </Window>
