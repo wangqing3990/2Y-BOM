@@ -57,7 +57,7 @@ namespace _2延线BOM运行监测系统
                     {
                         var result = MessageBox.Show("未输入完整的IP地址，是否仅修改计算机名？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question,
                              MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
-                        if (result == System.Windows.Forms.DialogResult.OK)
+                        if (result == System.Windows.Forms.DialogResult.Yes)
                         {
                             try
                             {
