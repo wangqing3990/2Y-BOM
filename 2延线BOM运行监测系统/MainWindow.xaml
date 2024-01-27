@@ -12,11 +12,11 @@
     </Window.Resources>
 
     <Grid>
-        <Grid Background="LightYellow">
+        <!--<Grid Background="LightYellow">
             <Grid.Effect>
                 <BlurEffect Radius="200"></BlurEffect>
             </Grid.Effect>
-        </Grid>
+        </Grid>-->
         <Grid Height="40" Background="Transparent" VerticalAlignment="Top" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown">
             <Image Source="imgs/SG.png" Width="40" Height="40" Margin="205,0,0,0" HorizontalAlignment="Left"/>
             <Label Height="40" Content="2延线BOM运行监测系统" FontSize="22" Margin="250,0,180,0" Foreground="Goldenrod" VerticalContentAlignment="Center"/>

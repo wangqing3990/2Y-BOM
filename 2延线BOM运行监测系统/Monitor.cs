@@ -54,7 +54,7 @@ namespace _2延线BOM运行监测系统
                     {
                         if (!repeat)
                         {
-                            sl.showLog($"夜间23：00-4：00暂停监测，如需启动BOM程序，点击[重启BOM]按钮{Environment.NewLine}");
+                            sl.showLog($"夜间23：30-4：00暂停监测，如需启动BOM程序，点击[重启BOM]按钮{Environment.NewLine}");
                             repeat = true;
                         }
                         Thread.Sleep(1000);

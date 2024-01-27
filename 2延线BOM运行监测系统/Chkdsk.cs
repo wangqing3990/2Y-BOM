@@ -33,7 +33,7 @@ namespace _2延线BOM运行监测系统
                 }
                 else if (exitCode == 50 || exitCode == 3) // 判断退出代码是否为 50或3，表示需要在下次启动时才能修复错误
                 {
-                    sl.showLog("磁盘 {disk} 需要在下次启动时才能修复错误,即将重启系统");
+                    sl.showLog($"磁盘 {disk} 需要在下次启动时才能修复错误,即将重启系统");
                     Process.Start("shutdown.exe", "/r /t 5 /f /d p:4:1 /c \"重启系统\"");
                     Thread.Sleep(10 * 1000);
                 }

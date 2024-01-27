@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace _2延线BOM运行监测系统
 {
@@ -19,13 +20,20 @@ namespace _2延线BOM运行监测系统
 
             ThreadPool.QueueUserWorkItem(state =>
             {
-                if (Directory.Exists(@"D:\"))
+                try
                 {
-                    File.AppendAllText(@"D:\LocalLog.txt", $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} {text}{Environment.NewLine}");
+                    if (Directory.Exists(@"D:\"))
+                    {
+                        File.AppendAllText(@"D:\LocalLog.txt", $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} {text}{Environment.NewLine}");
+                    }
+                    else
+                    {
+                        File.AppendAllText(@"C:\LocalLog.txt", $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} {text}{Environment.NewLine}");
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    File.AppendAllText(@"C:\LocalLog.txt", $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} {text}{Environment.NewLine}");
+                    
                 }
             });
         }

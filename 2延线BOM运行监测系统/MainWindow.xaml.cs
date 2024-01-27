@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -302,7 +303,7 @@ namespace _2延线BOM运行监测系统
                     DirectoryInfo directory = new DirectoryInfo(directoryPath);
                     foreach (var file in directory.GetFiles())
                     {
-                        if (file.CreationTime < DateTime.Now.AddMonths(-1))
+                        if (file.LastWriteTime < DateTime.Now.AddMonths(-1))
                         {
                             file.Delete();
                             sl.showLog($"{file.FullName}已被删除");
