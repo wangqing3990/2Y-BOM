@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -8,6 +7,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -29,6 +29,20 @@ namespace _2延线BOM运行监测系统
         public static BackgroundWorker updateWorker;
         public static CancellationTokenSource cts = new CancellationTokenSource();
         public static ManualResetEvent mre = new ManualResetEvent(true);
+        private const int MF_BYCOMMAND = 0x00000000;
+        public const int SC_CLOSE = 0xF060;
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern int RemoveMenu(IntPtr hMenu, int nPosition, int wFlags);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            // 在这里调用,this为MainWindow实例
+            IntPtr hwnd = new WindowInteropHelper(this).Handle;
+            RemoveMenu(GetSystemMenu(hwnd, false), SC_CLOSE, MF_BYCOMMAND);//禁用任务栏图标右键菜单的“关闭”选项
+        }
         public MainWindow()
         {
             InitializeComponent();

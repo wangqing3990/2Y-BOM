@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Windows;
 using System.Threading;
+using System.Windows;
 
 namespace _2延线BOM运行监测系统
 {
@@ -15,7 +10,6 @@ namespace _2延线BOM运行监测系统
     public partial class App : Application
     {
         private static Mutex _mutex = new Mutex(true, "{300B8DD8-2188-471F-8979-7E00F1AEA9AA}");
-
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -30,7 +24,6 @@ namespace _2延线BOM运行监测系统
             //删除启动文件夹下的启动程序快捷方式
             StartUpDelete.startUpDelete();
 
-            
         }
 
     }
