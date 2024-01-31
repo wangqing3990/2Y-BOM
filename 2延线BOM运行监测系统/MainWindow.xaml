@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_2延线BOM运行监测系统"
         mc:Ignorable="d"
-        Title="BOM运行监测"  Height="405" Width="700" BorderBrush="Goldenrod" BorderThickness="1" Background="White" WindowStyle="None" ResizeMode="NoResize" 
+        Title="BOM运行监测"  Height="405" Width="720" BorderBrush="Goldenrod" BorderThickness="1" Background="White" WindowStyle="None" ResizeMode="NoResize" 
         Icon="imgs/SG.ico" Loaded="MainWindow_OnLoaded" WindowStartupLocation="CenterScreen" >
     <Window.Resources>
 
@@ -25,7 +25,7 @@
         </Grid>
         <!--<Line Stroke="LightGray" StrokeThickness="0.8" X1="0" Y1="40" X2="700" Y2="40"></Line>-->
         <TextBox x:Name="tbShowLog" Height="334" Margin="200,45,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" VerticalScrollBarVisibility="Auto"
-                 Width="490" IsReadOnly="True" BorderBrush="Gold" BorderThickness="1" Background="Transparent"/>
+                 Width="510" IsReadOnly="True" BorderBrush="Gold" BorderThickness="1" Background="Transparent"/>
         <Label x:Name="lbDate" Content="2000-11-11" FontSize="26" Margin="18,38,0,0" Style="{StaticResource lbStyle1}"/>
         <Label x:Name="lbTime" Content="00：00：00" FontSize="30" Margin="18,66,0,0" Style="{StaticResource lbStyle1}"/>
 
@@ -46,8 +46,8 @@
         <Label  Content="设备号：" FontSize="18" Margin="6,146,0,0" Width="74" Style="{StaticResource lbStyle1}"/>
         <Label x:Name="lbStationName" Width="138" Style="{StaticResource lbStyle2}" Content="独墅湖邻里中心" Margin="57,113,0,0"/>
         <Label x:Name="lbEqNumber" Content="BOM001" Style="{StaticResource lbStyle2}" Margin="80,146,0,0" Width="96"/>
-        <StackPanel Height="25" VerticalAlignment="Bottom" Width="700">
-            <Label x:Name="lbVersion" Content="版本号：V 1.0.0.1000" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalContentAlignment="Top" Height="25" Width="140"/>
+        <StackPanel Height="25" VerticalAlignment="Bottom" Width="720">
+            <Label x:Name="lbVersion" Content="版本号：V 1.0.0.1000" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalContentAlignment="Top" Height="25" Width="130"/>
         </StackPanel>
 
 

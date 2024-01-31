@@ -260,31 +260,6 @@ namespace _2延线BOM运行监测系统
                 });
             }
 
-            if (btn == clearLog)//清理过期日志按钮
-            {
-                ThreadPool.QueueUserWorkItem(state =>
-                {
-                    sl.showLog("开始清理30天前的日志文件和交易数据文件...");
-                    try
-                    {
-                        if (Directory.Exists(@"D:\"))
-                        {
-                            DeleteFilesOlderThanOneMonth(@"D:\BOM\Log", @"D:\BOM\Datafile");
-                        }
-                        else
-                        {
-                            DeleteFilesOlderThanOneMonth(@"C:\BOM\Log", @"C:\BOM\Datafile");
-                        }
-
-                        sl.showLog("清理结束，如果有反复删除不掉的请执行[磁盘修复]按钮");
-                    }
-                    catch (Exception ex)
-                    {
-                        sl.showLog($"清理失败：{ex.Message}");
-                    }
-                });
-            }
-
             if (btn == monitorLogBtn)//监测日志按钮
             {
                 MonitorLogWindow monitorLogWindow = null;
@@ -306,9 +281,34 @@ namespace _2延线BOM运行监测系统
                     monitorLogWindow.Activate();
                 }
             }
+
+            if (btn == clearLog)//清理过期日志按钮
+            {
+                ThreadPool.QueueUserWorkItem(state =>
+                {
+                    sl.showLog("开始清理40天前的日志文件和交易数据文件...");
+                    try
+                    {
+                        if (Directory.Exists(@"D:\"))
+                        {
+                            DeleteOldFiles(40, @"D:\BOM\Log", @"D:\BOM\Datafile");
+                        }
+                        else
+                        {
+                            DeleteOldFiles(40, @"C:\BOM\Log", @"C:\BOM\Datafile");
+                        }
+
+                        sl.showLog("清理结束，如果有反复删除不掉的请执行[磁盘修复]按钮");
+                    }
+                    catch (Exception ex)
+                    {
+                        sl.showLog($"清理失败：{ex.Message}");
+                    }
+                });
+            }
         }
         //删除过期日志文件
-        private void DeleteFilesOlderThanOneMonth(params string[] directoryPaths)
+        private void DeleteOldFiles(int days, params string[] directoryPaths)
         {
             foreach (var directoryPath in directoryPaths)
             {
@@ -317,7 +317,7 @@ namespace _2延线BOM运行监测系统
                     DirectoryInfo directory = new DirectoryInfo(directoryPath);
                     foreach (var file in directory.GetFiles())
                     {
-                        if (file.LastWriteTime < DateTime.Now.AddMonths(-1))
+                        if (file.LastWriteTime < DateTime.Now.AddDays(-days))
                         {
                             file.Delete();
                             sl.showLog($"{file.FullName}已被删除");
@@ -325,7 +325,7 @@ namespace _2延线BOM运行监测系统
                     }
                     foreach (var subDirectory in directory.GetDirectories())
                     {
-                        DeleteFilesOlderThanOneMonth(subDirectory.FullName);
+                        DeleteOldFiles(days, subDirectory.FullName);
                     }
                 }
                 catch (Exception ex)
