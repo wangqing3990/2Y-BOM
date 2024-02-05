@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace _2延线BOM运行监测系统
@@ -27,7 +24,7 @@ namespace _2延线BOM运行监测系统
                 //sl.showLog(exitCode.ToString());//调试
 
                 // 判断退出代码为0，表示 chkdsk 命令成功执行
-                if (exitCode == 0)
+                if (exitCode == 0 || exitCode == 1)
                 {
                     sl.showLog($"磁盘 {disk} 修复成功\n");
                 }

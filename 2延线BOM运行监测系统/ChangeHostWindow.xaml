@@ -32,7 +32,7 @@
         
         <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Bottom" Margin="0,8">
             <Button x:Name="btnOK" Content="确定" Style="{StaticResource btnStyle1}" Margin="35,0" Height="30" Click="ButtonBase_OnClick"/>
-            <Button x:Name="btnCancel" Content="取消" Style="{StaticResource btnStyle1}" Margin="25,0" Height="30" Click="ButtonBase_OnClick"/>
+            <Button x:Name="btnCancel" Content="取消" Style="{StaticResource btnStyle1}" Margin="35,0" Height="30" Click="ButtonBase_OnClick"/>
         </StackPanel>
     </Grid>
 </Window>

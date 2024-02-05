@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -335,6 +336,11 @@ namespace _2延线BOM运行监测系统
             }
         }
 
-
+        //TextBox的垂直滚动条自动下移
+        private void TbShowLog_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb=sender as TextBox;
+            tb.ScrollToEnd();
+        }
     }
 }
