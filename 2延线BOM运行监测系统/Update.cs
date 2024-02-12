@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Windows;
 
@@ -13,12 +10,12 @@ namespace _2延线BOM运行监测系统
     class Update
     {
         static ShowLog sl = new ShowLog();
-        private static string updateServerPath = @"\\172.22.100.13\2ydata\BOMUpdate\";
-        //private static string updateServerPath = @"\\172.22.50.175\2ydata\BOMUpdate\";
+        private static readonly string updateServerPath = @"\\172.22.100.13\2ydata\BOMUpdate\";
+        //private static readonly string updateServerPath = @"\\172.22.50.175\2ydata\BOMUpdate\";
 
         public static void update(CancellationTokenSource cts)
         {
-            cts = MainWindow.cts;
+            //cts = MainWindow.cts;
             while (!cts.IsCancellationRequested)
             {
                 Thread.Sleep(10 * 1000);
@@ -39,37 +36,46 @@ namespace _2延线BOM运行监测系统
                             try
                             {
                                 string directoryPath = @"\\172.22.100.13\2ydata\2yBOMLog\updateLog";
+                                //string directoryPath = @"\\172.22.50.175\2ydata\2yBOMLog\updateLog";
                                 if (!Directory.Exists(directoryPath))
+                                {
                                     Directory.CreateDirectory(directoryPath);
+                                }
 
                                 string eryanBOMVersionLogPath = Path.Combine(directoryPath, $"{DateTime.Today.ToString("yyMMdd")}.txt");
                                 if (!File.Exists(eryanBOMVersionLogPath))
+                                {
                                     using (File.Create(eryanBOMVersionLogPath)) { }
+                                }
+
                                 string stationName = GetStationName.getStationName();
 
                                 File.AppendAllText(eryanBOMVersionLogPath,
                                             $"{DateTime.Now} {stationName}{Environment.MachineName}更新版本：{currentVersion.ToString()}->{latestVersionStr}" + Environment.NewLine);
                             }
-                            catch (Exception) { }
-                        });
-
-                        try
-                        {
-                            ProcessStartInfo psi = new ProcessStartInfo
+                            catch (Exception ex)
                             {
-                                FileName = "BOMUpdate.exe",
-                                CreateNoWindow = true,
-                                UseShellExecute = false,
-                                RedirectStandardOutput = false,
-                                RedirectStandardError = false
-                            };
-                            Process updaterProcess = new Process { StartInfo = psi };
-                            updaterProcess.Start();
-                        }
-                        catch (Exception) { }
+                                //MessageBox.Show($"{ex.ToString()}");
+                            }
 
-                        MainWindow.cancelThreads();
-                        Environment.Exit(0);
+                            try
+                            {
+                                ProcessStartInfo psi = new ProcessStartInfo
+                                {
+                                    FileName = "BOMUpdate.exe",
+                                    CreateNoWindow = true,
+                                    UseShellExecute = false,
+                                    RedirectStandardOutput = false,
+                                    RedirectStandardError = false
+                                };
+                                Process updaterProcess = new Process { StartInfo = psi };
+                                updaterProcess.Start();
+                            }
+                            catch (Exception) { }
+
+                            MainWindow.cancelThreads();
+                            Environment.Exit(0);
+                        });
                     }
                 }
                 catch (Exception) { }

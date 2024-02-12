@@ -31,7 +31,7 @@ namespace _2延线BOM运行监测系统
         private const string BOM = "Suzhou.APP.BOM";
         public static void MonitorBOM(CancellationTokenSource cts, ManualResetEvent mre)
         {
-            cts = MainWindow.cts;
+            //cts = MainWindow.cts;
             monitorMre = mre;
             Thread.Sleep(60 * 1000);//启动程序后等待1分钟再开始监测
             TimeSpan start = new TimeSpan(23, 30, 0);

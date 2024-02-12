@@ -146,7 +146,6 @@ namespace _2延线BOM运行监测系统
 
         public static void CheckScreen(CancellationTokenSource cts)
         {
-            cts = MainWindow.cts;
             Screen[] screens = Screen.AllScreens; //获取所有屏幕对象
             DEVMODE devMode = new DEVMODE(); //创建DEVMODE对象
             devMode.dmSize = (short)Marshal.SizeOf(devMode); //设置结构体大小
