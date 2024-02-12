@@ -339,7 +339,7 @@ namespace _2延线BOM运行监测系统
         //TextBox的垂直滚动条自动下移
         private void TbShowLog_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            TextBox tb=sender as TextBox;
+            TextBox tb = sender as TextBox;
             tb.ScrollToEnd();
         }
     }

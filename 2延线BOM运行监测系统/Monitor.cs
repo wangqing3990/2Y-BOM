@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Threading;
 
 namespace _2延线BOM运行监测系统
 {
@@ -19,6 +13,8 @@ namespace _2延线BOM运行监测系统
         private static bool isShown = false;//只显示BOM正在运行一次
         public static ShowLog sl = new ShowLog();
         public static ManualResetEvent monitorMre;
+        private static bool isSleeping = false;
+
         private static string ExtractFilePathFromErrorMessage(string errorMessage)
         {
             // 错误信息的格式为：文件或目录\BOM\Log\CCM\20230410.log已损坏且无法读取。请运行Chkdsk工具。
@@ -78,9 +74,18 @@ namespace _2延线BOM运行监测系统
                         }
                         else if (result == DialogResult.No)
                         {
-                            sl.showLog("暂停BOM运行监测5分钟");
-                            Thread.Sleep(5 * 60 * 1000);
-                            sl.showLog("恢复监测");
+                            if (!isSleeping)
+                            {
+                                sl.showLog("暂停BOM运行监测5分钟");
+                                isSleeping = true;
+                                Thread.Sleep(5 * 60 * 1000);
+                                sl.showLog("恢复监测");
+                                isSleeping = false;
+                            }
+                            else
+                            {
+                                sl.showLog("BOM运行监测正在暂停中...");
+                            }
                         }
                     }
                 }
@@ -96,8 +101,8 @@ namespace _2延线BOM运行监测系统
             }
         }
 
-        private static string BOMDPath = @"D:\BOM";
-        private static string BOMCPath = @"C:\BOM";
+        private static readonly string BOMDPath = @"D:\BOM";
+        private static readonly string BOMCPath = @"C:\BOM";
         public static void startBOM()
         {
             if (Directory.Exists(@"D:\"))
@@ -173,9 +178,18 @@ namespace _2延线BOM运行监测系统
 
                     if (result == DialogResult.Yes)
                     {
-                        sl.showLog("人为退出BOM程序，暂停运行监测5分钟\n");
-                        Thread.Sleep(5 * 60 * 1000);
-                        sl.showLog("恢复监测");
+                        if (!isSleeping)
+                        {
+                            isSleeping = true;
+                            sl.showLog("人为退出BOM程序，暂停运行监测5分钟\n");
+                            Thread.Sleep(5 * 60 * 1000);
+                            isSleeping = false;
+                            sl.showLog("恢复监测");
+                        }
+                        else
+                        {
+                            sl.showLog("BOM运行监测正在暂停中...");
+                        }
                     }
                     else if (result == DialogResult.No)
                     {
