@@ -2,7 +2,9 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Sockets;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,6 +30,7 @@ namespace _2延线BOM运行监测系统
         public static BackgroundWorker monitorWorker;
         public static BackgroundWorker resolutionWorker;
         public static BackgroundWorker updateWorker;
+        public static BackgroundWorker connectServerWorker;
         public static CancellationTokenSource cts = new CancellationTokenSource();
         public static ManualResetEvent mre = new ManualResetEvent(true);
         private const int MF_BYCOMMAND = 0x00000000;
@@ -68,6 +71,10 @@ namespace _2延线BOM运行监测系统
             updateWorker = new BackgroundWorker();
             updateWorker.DoWork += update;
             updateWorker.RunWorkerAsync(cts.Token);
+
+            connectServerWorker = new BackgroundWorker();
+            connectServerWorker.DoWork += connectServer;
+            connectServerWorker.RunWorkerAsync(cts.Token);
         }
 
         private void monitorBOM(object sender, DoWorkEventArgs e)
@@ -83,6 +90,11 @@ namespace _2延线BOM运行监测系统
         private void update(object sender, DoWorkEventArgs e)
         {
             Update.update(cts);
+        }
+
+        private void connectServer(object sender, DoWorkEventArgs e)
+        {
+            Client.connectServer(cts);
         }
         public static void CancelBackgroundWorkers()
         {

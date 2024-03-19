@@ -83,6 +83,7 @@
     <Compile Include="ChangeHostWindow.xaml.cs">
       <DependentUpon>ChangeHostWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Client.cs" />
     <Compile Include="ConnectDB.cs" />
     <Compile Include="Copy.cs" />
     <Compile Include="GetStationName.cs" />
