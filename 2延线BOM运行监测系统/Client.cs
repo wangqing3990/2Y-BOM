@@ -1,7 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 
 namespace _2延线BOM运行监测系统
@@ -9,86 +9,46 @@ namespace _2延线BOM运行监测系统
     class Client
     {
         static ShowLog sl = new ShowLog();
-        private static TcpClient tcpclnt = null;
-        private static readonly TimeSpan sendInterval = TimeSpan.FromSeconds(10);
-        private static DateTime lastSendTime = DateTime.MinValue;
 
         public static void connectServer(CancellationTokenSource cts)
         {
+            string version = $"V {Assembly.GetEntryAssembly()?.GetName().Version}\n";
             while (!cts.IsCancellationRequested)
             {
+
+                TcpClient clientSocket = new TcpClient();
                 try
                 {
-                    if (tcpclnt == null || !tcpclnt.Connected)
-                    {
-                        ConnectToServer();
-                    }
+                    // sl.showLog("连接服务器中...");
+                    clientSocket.Connect("172.22.50.3", 8888); // 连接到服务器
+                    // sl.showLog("连接服务器成功");
 
-                    sl.showLog(tcpclnt.Connected.ToString());
-
-                    if ((DateTime.Now - lastSendTime) > sendInterval && tcpclnt.Connected)
+                    using (NetworkStream networkStream = clientSocket.GetStream())
+                    using (StreamWriter writer = new StreamWriter(networkStream))
                     {
-                        SendVersionInformation();
-                        lastSendTime = DateTime.Now;
+                        while (true)
+                        {
+                            // sl.showLog("对服务端发送版本消息");
+                            string message =version;
+                            writer.Write(message);
+                            writer.Flush(); // 确保消息被发送
+                            // networkStream.Flush();
+                            // 每隔10秒发送一次消息
+                            Thread.Sleep(TimeSpan.FromSeconds(10));
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
-                    sl.showLog("Error1: " + ex.Message);
+                    // sl.showLog("连接服务器失败: " + ex.Message);
                 }
-                Thread.Sleep(1000);
-            }
-        }
-
-        private static void ConnectToServer()
-        {
-            try
-            {
-                sl.showLog("连接服务器中...");
-                tcpclnt = new TcpClient();
-                tcpclnt.Connect("172.22.50.3", 8888);
-                sl.showLog("连接服务器成功");
-                return;
-            }
-            catch (Exception ex)
-            {
-                sl.showLog("连接服务器失败: " + ex.Message);
-                if (tcpclnt != null)
+                finally
                 {
-                    tcpclnt.Close();
-                    tcpclnt = null;
+                    clientSocket.Close(); // 关闭连接
+                    // sl.showLog("已关闭连接");
                 }
+                Thread.Sleep(TimeSpan.FromSeconds(10));
             }
-        }
-
-        private static void SendVersionInformation()
-        {
-            try
-            {
-                string version = $"V {Assembly.GetEntryAssembly()?.GetName().Version}\n";
-
-                tcpclnt.NoDelay = true;
-
-                /*using (NetworkStream networkStream = tcpclnt.GetStream())
-                {*/
-                    NetworkStream networkStream = tcpclnt.GetStream();
-
-                    sl.showLog("Sending version information...");
-                    byte[] versionBytes = Encoding.ASCII.GetBytes(version);
-                    networkStream.Write(versionBytes, 0, versionBytes.Length);
-                    networkStream.Flush();
-                // }
-            }
-            catch (Exception ex)
-            {
-                sl.showLog("Error2: " + ex.Message);
-                if (tcpclnt != null)
-                {
-                    tcpclnt.Close();
-                    tcpclnt = null;
-                }
-            }
-            
         }
     }
 }
