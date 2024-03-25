@@ -20,7 +20,7 @@ namespace _2延线BOM运行监测系统
                 try
                 {
                     // sl.showLog("连接服务器中...");
-                    clientSocket.Connect("172.22.50.3", 8888); // 连接到服务器
+                    clientSocket.Connect("172.22.50.3", 49200); // 连接到服务器
                     // sl.showLog("连接服务器成功");
 
                     using (NetworkStream networkStream = clientSocket.GetStream())
