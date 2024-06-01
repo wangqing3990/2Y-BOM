@@ -35,31 +35,6 @@ namespace _2延线BOM运行监测系统
                         {
                             try
                             {
-                                string directoryPath = @"\\172.22.100.13\2ydata\2yBOMLog\updateLog";
-                                //string directoryPath = @"\\172.22.50.175\2ydata\2yBOMLog\updateLog";
-                                if (!Directory.Exists(directoryPath))
-                                {
-                                    Directory.CreateDirectory(directoryPath);
-                                }
-
-                                string eryanBOMVersionLogPath = Path.Combine(directoryPath, $"{DateTime.Today.ToString("yyMMdd")}.txt");
-                                if (!File.Exists(eryanBOMVersionLogPath))
-                                {
-                                    using (File.Create(eryanBOMVersionLogPath)) { }
-                                }
-
-                                string stationName = GetStationName.getStationName();
-
-                                File.AppendAllText(eryanBOMVersionLogPath,
-                                            $"{DateTime.Now} {stationName}{Environment.MachineName}更新版本：{currentVersion.ToString()}->{latestVersionStr}" + Environment.NewLine);
-                            }
-                            catch (Exception ex)
-                            {
-                                //MessageBox.Show($"{ex.ToString()}");
-                            }
-
-                            try
-                            {
                                 ProcessStartInfo psi = new ProcessStartInfo
                                 {
                                     FileName = "BOMUpdate.exe",

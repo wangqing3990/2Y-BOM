@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.PerformanceData;
 using System.IO;
-using System.Linq;
 using System.Net.NetworkInformation;
-using System.Text;
 using System.Threading;
 
 namespace _2延线BOM运行监测系统
@@ -15,13 +11,14 @@ namespace _2延线BOM运行监测系统
 
         public static void remote(string targetDisk)
         {
-            //string remoteIP = "172.22.50.175";
             string remoteIP = "172.22.100.13";
             string BOMPath = Path.Combine(targetDisk, "BOM");
             string logdir = Path.Combine(targetDisk, @"BOM\Log");
             string logBak = Path.Combine(targetDisk, "LogBak");
             string datafileDir = Path.Combine(targetDisk, @"BOM\Datafile");
             string datafileBak = @"C:\DatafileBak";
+            string parPath = Path.Combine(targetDisk, @"BOM\Param\Current\8014.par");
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
             string sourcePath = @"\\" + remoteIP + @"\2ydata\BOM";
 
@@ -45,6 +42,16 @@ namespace _2延线BOM运行监测系统
                 sl.showLog($"备份Datafile目录失败：{ex.Message}");
             }
 
+            sl.showLog(@"开始备份8014.par文件->桌面");
+            try
+            {
+                File.Copy(parPath, Path.Combine(desktopPath, "8014.par"), true);
+            }
+            catch (Exception ex)
+            {
+                sl.showLog($"备份8014.par文件失败：{ex.Message}");
+            }
+
             //删除本地BOM程序目录
             if (Directory.Exists(BOMPath))
             {
@@ -66,6 +73,23 @@ namespace _2延线BOM运行监测系统
                 {
                     sl.showLog("开始自动拷贝BOM程序...");
                     Copy.CopySth(sourcePath, Path.Combine(targetDisk, "BOM"), "log", "datafile");
+                    //删除8014.par
+                    if (File.Exists(parPath))
+                    {
+                        File.Delete(parPath);
+                    }
+
+                    if (File.Exists(Path.Combine(desktopPath, "8014.par")))
+                    {
+                        try
+                        {
+                            File.Copy(Path.Combine(desktopPath, "8014.par"), parPath, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            sl.showLog($"8014.par替换失败：{ex.Message}");
+                        }
+                    }
                     sl.showLog("BOM程序拷贝成功");
 
                     sl.showLog("开始恢复Datafile目录");
@@ -86,6 +110,7 @@ namespace _2延线BOM运行监测系统
                         sl.showLog("未找到Datafile备份目录");
                     }
                     sl.showLog("BOM程序重装完成");
+
                     ThreadPool.QueueUserWorkItem(state =>
                     {
                         try
