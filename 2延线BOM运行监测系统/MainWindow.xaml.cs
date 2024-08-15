@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
@@ -12,10 +13,12 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.Forms.MessageBox;
 using MessageBoxOptions = System.Windows.Forms.MessageBoxOptions;
 using TextBox = System.Windows.Controls.TextBox;
+// using Timer = System.Threading.Timer;
 using Timer = System.Timers.Timer;
 
 namespace _2延线BOM运行监测系统
@@ -30,11 +33,15 @@ namespace _2延线BOM运行监测系统
         public static BackgroundWorker monitorWorker;
         public static BackgroundWorker resolutionWorker;
         public static BackgroundWorker updateWorker;
-        public static BackgroundWorker connectServerWorker;
+        // public static BackgroundWorker connectServerWorker;
         public static CancellationTokenSource cts = new CancellationTokenSource();
         public static ManualResetEvent mre = new ManualResetEvent(true);
         private const int MF_BYCOMMAND = 0x00000000;
         public const int SC_CLOSE = 0xF060;
+        private UdpClient udpClient;
+        private IPEndPoint remoteEndPoint;
+        private DispatcherTimer timerSendData;//发送数据定时器
+
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern int RemoveMenu(IntPtr hMenu, int nPosition, int wFlags);
 
@@ -51,6 +58,33 @@ namespace _2延线BOM运行监测系统
         {
             InitializeComponent();
             publicTextBox = this.tbShowLog;
+
+            udpClient = new UdpClient();
+            string serverIp = "172.22.100.13";
+            int serverPort = 26730;
+            remoteEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
+            timerSendData = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(10)
+            };
+            timerSendData.Tick += TimerSendMethod;
+            timerSendData.Start();
+        }
+
+        
+
+        private void TimerSendMethod(object sender, EventArgs e)
+        {
+            string version = $"V {Assembly.GetEntryAssembly()?.GetName().Version}";
+            byte[] data = Encoding.UTF8.GetBytes(version);
+            // MessageBox.Show(version);
+            try
+            {
+                udpClient.Send(data, data.Length, remoteEndPoint);
+            }
+            catch (Exception)
+            {
+            }
         }
 
         //加载时
@@ -72,9 +106,9 @@ namespace _2延线BOM运行监测系统
             updateWorker.DoWork += update;
             updateWorker.RunWorkerAsync(cts.Token);
 
-            connectServerWorker = new BackgroundWorker();
-            connectServerWorker.DoWork += connectServer;
-            connectServerWorker.RunWorkerAsync(cts.Token);
+            // connectServerWorker = new BackgroundWorker();
+            // connectServerWorker.DoWork += connectServer;
+            // connectServerWorker.RunWorkerAsync(cts.Token);
         }
 
         private void monitorBOM(object sender, DoWorkEventArgs e)
@@ -89,18 +123,20 @@ namespace _2延线BOM运行监测系统
 
         private void update(object sender, DoWorkEventArgs e)
         {
+            // timerSendData.Stop();
+            // CancelBackgroundWorkers();
             Update.update(cts);
         }
 
-        private void connectServer(object sender, DoWorkEventArgs e)
+        /*private void connectServer(object sender, DoWorkEventArgs e)
         {
             Client.connectServer(cts);
-        }
+        }*/
         public static void CancelBackgroundWorkers()
         {
             monitorWorker.CancelAsync();
             resolutionWorker.CancelAsync();
-            updateWorker.CancelAsync();
+            // updateWorker.CancelAsync();
         }
 
         public static void cancelThreads()
