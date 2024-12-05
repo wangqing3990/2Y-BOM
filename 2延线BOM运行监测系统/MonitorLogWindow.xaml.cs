@@ -1,26 +1,17 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using MySql.Data.MySqlClient;
 using Button = System.Windows.Controls.Button;
 using ComboBox = System.Windows.Controls.ComboBox;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.Forms.MessageBox;
 using MessageBoxOptions = System.Windows.Forms.MessageBoxOptions;
-using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace _2延线BOM运行监测系统
 {
@@ -85,6 +76,41 @@ namespace _2延线BOM运行监测系统
             }
         }
 
+        private string inquireSql(string tableName, DateTime startDate, DateTime endDate)
+        {
+            string sql = $"SELECT * " +
+                         $"FROM {tableName} " +
+                         $"WHERE 时间 BETWEEN '{startDate.ToString("yyyy-MM-dd HH:mm:ss")}' AND '{endDate.ToString("yyyy-MM-dd HH:mm:ss")}'";
+
+            if (cbStation.SelectedItem != null)
+            {
+                sql += $"AND 车站 ='{cbStation.SelectionBoxItem}'";
+            }
+
+            if (cbEq.SelectedItem != null)
+            {
+                sql += $"AND 设备号 ='{cbEq.SelectionBoxItem}'";
+            }
+
+            if (cbType.SelectedItem != null)
+            {
+                if (cbType.SelectionBoxItem.Equals("程序闪退"))
+                {
+                    sql += $"AND 内容 LIKE '%重启%'";
+                }
+                else if (cbType.SelectionBoxItem.Equals("分辨率跳变"))
+                {
+                    sql += $"AND 内容 LIKE '%分辨率%'";
+                }
+                else if (cbType.SelectionBoxItem.Equals("程序崩溃"))
+                {
+                    sql += $"AND 内容 LIKE '%盘修复%'";
+                }
+            }
+
+            return sql;
+        }
+
         private void button_Click(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
@@ -115,47 +141,48 @@ namespace _2延线BOM运行监测系统
             {
                 DateTime startDate = dpStart.SelectedDate.Value;
                 DateTime endDate = dpEnd.SelectedDate.Value;
+
+                int startYear = startDate.Year;
+                int endYear = endDate.Year;
+
                 if (startDate <= endDate)
                 {
-                    try
+                    if (startYear != endYear)
                     {
-                        string sql = $"SELECT * " +
-                                     $"FROM {tableName} " +
-                                     $"WHERE 时间 BETWEEN '{startDate.ToString("yyyy-MM-dd")}' AND '{endDate.ToString("yyyy-MM-dd")}'";
-
-                        if (cbStation.SelectedItem != null)
+                        List<bomData> allData = new List<bomData>();
+                        for (int year = startYear; year <= endYear; year++)
                         {
-                            sql += $"AND 车站 ='{cbStation.SelectionBoxItem}'";
-                        }
-
-                        if (cbEq.SelectedItem != null)
-                        {
-                            sql += $"AND 设备号 ='{cbEq.SelectionBoxItem}'";
-                        }
-
-                        if (cbType.SelectedItem != null)
-                        {
-                            if (cbType.SelectionBoxItem.Equals("程序闪退"))
+                            try
                             {
-                                sql += $"AND 内容 LIKE '%重启%'";
+                                string sql = inquireSql($"2ybom{year}", startDate, endDate);
+                                var yearData = GetBomDataFromMysql(sql);
+                                allData.AddRange(yearData);
                             }
-                            else if (cbType.SelectionBoxItem.Equals("分辨率跳变"))
+                            catch (Exception ex)
                             {
-                                sql += $"AND 内容 LIKE '%分辨率%'";
-                            }
-                            else if (cbType.SelectionBoxItem.Equals("程序崩溃"))
-                            {
-                                sql += $"AND 内容 LIKE '%盘修复%'";
+                                MessageBox.Show($"查询数据库错误：{ex.Message}");
                             }
                         }
 
-                        dataGrid.ItemsSource = GetBomDataFromMysql(sql);
-                        Dispatcher.Invoke((Action)(() =>
-                        {
-                            lineNumber.Content = $"行数：{dataGrid.Items.Count}";
-                        }));
+                        dataGrid.ItemsSource = allData;
                     }
-                    catch (Exception) { }
+                    else
+                    {
+                        try
+                        {
+                            string sql = inquireSql($"2ybom{startYear}", startDate, endDate);
+                            dataGrid.ItemsSource = GetBomDataFromMysql(sql);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"查询数据库错误：{ex.Message}");
+                        }
+                    }
+
+                    Dispatcher.Invoke((Action)(() =>
+                    {
+                        lineNumber.Content = $"行数：{dataGrid.Items.Count}";
+                    }));
                 }
                 else
                 {
@@ -166,7 +193,10 @@ namespace _2延线BOM运行监测系统
             //删除选中行按钮
             if (btn == delBtn)
             {
-                if (dataGrid.SelectedItems.Count == 0) return;
+                if (dataGrid.SelectedItems.Count == 0)
+                {
+                    return;
+                }
 
                 var result = MessageBox.Show("确定删除所有选中的行？这会同时删除数据库里的数据，请谨慎操作！", "警告", MessageBoxButtons.OKCancel,
                      MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
@@ -276,7 +306,7 @@ namespace _2延线BOM运行监测系统
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"获取数据失败：{ex.Message}");
+                    // MessageBox.Show($"获取数据失败：{ex.Message}");
                 }
                 finally
                 {

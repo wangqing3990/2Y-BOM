@@ -60,12 +60,12 @@ namespace _2延线BOM运行监测系统
             publicTextBox = this.tbShowLog;
 
             udpClient = new UdpClient();
-            string serverIp = "172.22.100.13";
+            string serverIp = "172.22.50.3";
             int serverPort = 26730;
             remoteEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             timerSendData = new DispatcherTimer
             {
-                Interval = TimeSpan.FromSeconds(10)
+                Interval = TimeSpan.FromSeconds(5)
             };
             timerSendData.Tick += TimerSendMethod;
             timerSendData.Start();
